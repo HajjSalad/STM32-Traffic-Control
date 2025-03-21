@@ -1,0 +1,4 @@
+../Src/systick.c:19:6:SysTick_Handler	4	static
+../Src/systick.c:24:6:systick_init	4	static
+../Src/systick.c:33:10:systickGetMillis	4	static
+../Src/systick.c:37:6:systickDelayMs	24	static

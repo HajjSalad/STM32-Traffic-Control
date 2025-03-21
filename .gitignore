@@ -6,6 +6,7 @@
 # Ignore build directories
 /build/
 /dist/
+/Debug/
 
 # Ignore logs
 *.log
@@ -15,3 +16,10 @@
 .vscode/
 .idea/
 .DS_Store
+
+# Ignore IDE-specific project settings
+.settings/
+*.cproject
+*.project
+*.launch
+

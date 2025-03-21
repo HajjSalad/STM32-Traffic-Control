@@ -1,8 +1,0 @@
-"./Src/exti.o"
-"./Src/lights.o"
-"./Src/main.o"
-"./Src/syscalls.o"
-"./Src/sysmem.o"
-"./Src/systick.o"
-"./Src/uart.o"
-"./Startup/startup_stm32f411retx.o"

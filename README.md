@@ -3,11 +3,11 @@
 This project implements a Traffic Light Control System on STM32 which controls 4 traffic lights at an intersection. The system dynamically adapts to vehicle presence and count.
 
 ### Features
-**Finite-State Machine (FSM):** Manages traffic light states and transitions for real-time control.<br>
-**Dynamic Signal Timing:** Adjusts signal timing based on vehicle presence and count.<br>
-**GPIO Interrupts:** Utilizes interrupt-driven button presses for vehicle counting.<br>
-**RGB LED Control:** Drives traffic lights using GPIO outputs.<br>
-**Bare-Metal Firmware:** Implemented in C using direct register access for efficiency.<br>
+- **Finite-State Machine (FSM):** Manages traffic light states and transitions for real-time control.
+- **Dynamic Signal Timing:** Adjusts signal timing based on vehicle presence and count.
+- **GPIO Interrupts:** Utilizes interrupt-driven button presses for vehicle counting.
+- **RGB LED Control:** Drives traffic lights using GPIO outputs.<br>
+- **Bare-Metal Firmware:** Implemented in C using direct register access for efficiency.<br>
 
 ### Demo
 View the demo in action.

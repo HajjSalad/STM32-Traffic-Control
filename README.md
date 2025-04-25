@@ -11,16 +11,11 @@ This project implements a Traffic Light Control System on STM32 which controls 4
 
 ### 🏗 System Architecture
 ```
-                                      |
-                                      |
-                                      |
-                                      |
-
-│
-│
-│
-│
-│
+                                     |  |  │
+                                     |  |  │
+                                     |  |⬇️│ 
+                                     |  |  │
+                                     |⬇️|  │
 
                _ _ _ _ _ _ _ .
                _ _ _ ⬅️ _  _ |

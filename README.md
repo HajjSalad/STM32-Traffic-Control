@@ -17,12 +17,12 @@ This project implements a Traffic Light Control System on STM32 which controls 4
                                      |  |  │  |  |
                                      |⬇️|  │⬆️|  |
                                      ── ── ── ── ─ 
-  east-bound                           🚥 
-   traffic     _ _ _ _ _ _ _ .       Light 2           ._ _ _ _ _ _ _ _ _ west-bound
+                                      🚥 
+               _ _ _ _ _ _ _ .       Light 2           ._ _ _ _ _ _ _ _ _ west-bound
                _ _ _ ⬅️ _  _ |                       🚦|_⬅️ _ _ _ _ _ _ _   traffic
                ___________⬅️_|                 Light 3 |_______⬅️________
-               _ _ _➡️ _ _ _ |🚦                       |_➡️ _ _ _ _ _ _ _
-               _ _ _ _ _➡️ _ |Light 1                  |_ _ _ _ ➡️_ _ _ _
+    east-bound _ _ _➡️ _ _ _ |🚦                       |_➡️ _ _ _ _ _ _ _
+      traffic  _ _ _ _ _➡️ _ |Light 1                  |_ _ _ _ ➡️_ _ _ _
                                              🚥 Light 4
                                      ── ── ── ── ─ 
                                      |⬇️|  │  |⬆️|
@@ -30,6 +30,14 @@ This project implements a Traffic Light Control System on STM32 which controls 4
                                      |  |⬇️│⬆️|  |   traffic
                                      |  |  │  |  |
                                      |  |  │  |  |
+```
+`Light 1` and `Light 3` are synced
+`Light 2` and `Light 4` are synced
+
+💡 **Example Usage**
+```bash
+hdoufdovbfv
+
 ```
 
 ### Demo

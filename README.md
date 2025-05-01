@@ -36,7 +36,7 @@ This project implements a Traffic Light Control System on STM32 which controls 4
 `Light 1` and `Light 3` are synchronized, operating in tandem to manage east-west traffic flow.  
 `Light 2` and `Light 4` are synchronized, controlling north-south traffic flow.  
 
-####💡 **Example Serial Terminal Output**
+#### 💡 **Example Serial Terminal Output**
 ```bash
 other outputs above...
 Light 1-3: RED (east-west traffic stopped)   

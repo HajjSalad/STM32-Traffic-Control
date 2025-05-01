@@ -65,7 +65,7 @@ Light 1-3: GREEN (east-west traffic allowed)
 &nbsp;&nbsp;&nbsp;⎔ Breadboards - Used for prototyping and testing the traffic light system  
 
 #### ⛓️ Hardware Connection  
-LED Connections:   
+RGB LED Connections:   
 &nbsp;&nbsp;&nbsp;&nbsp;• Common anode pins connected to ground (active-low configuration)   
 &nbsp;&nbsp;&nbsp;&nbsp;• Red and green channels driven by dedicated GPIO outputs  
 &nbsp;&nbsp;&nbsp;&nbsp;• Yellow state achieved by simultaneously activating both red and green channels  

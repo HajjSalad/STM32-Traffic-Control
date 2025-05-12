@@ -7,6 +7,7 @@
 
 #include "stm32f446xx.h"
 #include "systick.h"
+#include "main.h"
 
 
 #define SYSTICK_LOAD_VAL		16000
@@ -18,6 +19,8 @@ volatile uint32_t systickMillis = 0;		// Global variable to store milliseconds
 
 void SysTick_Handler(void) {
 	systickMillis++;						// Increment milliseconds counter
+	SysTick_Runner();					// Used to wait for 3 secs
+	commonTimer();
 }
 
 // Configure SysTick

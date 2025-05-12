@@ -8,75 +8,88 @@
 
 #include "uart.h"
 #include "exti.h"
+#include "main.h"
 #include "lights.h"
 #include "systick.h"
 #include "stm32f446xx.h"
 
-#define THRESHOLD		3
-#define DEBOUNCE_TIME  100
-
-// Traffic Light states
-typedef enum {
-	RED,				// Stop
-	YELLOW,				// Prepare to stop
-	GREEN,				// Go
-	OFF,				// Light OFF
-} LightState;
-
-// Traffic light structure
-typedef struct {
-	LightState state;			// Current state of the light
-	int carCount;				// Cars detected at the light
-	int redPin;					// GPIO pin for RED light
-	int greenPin;				// GPIO pin for GREEN light
-} TrafficLight;
+const uint32_t BUTTON[BUTTONS] = {BUTTON1, BUTTON2, BUTTON3, BUTTON4};
 
 TrafficLight Light[4];			// Instantiate 4 traffic light
 
 // Map Light to Register addresses
 void map_lights(void) {
-	Light[0] = (TrafficLight){GREEN, 0, 10, 4};	// High traffic - start with GREEN
+	Light[0] = (TrafficLight){GREEN, 0, 10, 4};		// High traffic - start with GREEN
 	Light[1] = (TrafficLight){RED, 0, 5, 3};		// Low traffic - start with RED
 	Light[2] = (TrafficLight){GREEN, 0, 2, 1};
 	Light[3] = (TrafficLight){RED, 0, 14, 13};
 }
 
-// Button input interrupt Handler
-void EXTI15_10_IRQHandler(void) {
-	static uint32_t lastPressTime[4] = {0};
-	uint32_t currentTime = systickGetMillis();
+uint32_t waitingQueue[MAX_WAITING_PAIR];
+int front = -1, rear = -1;
 
-	if ((EXTI->PR & BUTTON1) != 0) {
-		// Check if after 100ms - Prevent debounce that result in consecutive presses
-		if (currentTime - lastPressTime[0] >= DEBOUNCE_TIME) {
-			lastPressTime[0] = currentTime;  	// Update last press time
-			Light[0].carCount++;				// Increment car count
-			printf("Light 1 car detected: %d\n\r", Light[0].carCount);
-		}
-		EXTI->PR |= BUTTON1;		// Clear interrupt (PR) flag
-	} else if ((EXTI->PR & BUTTON2) != 0) {
-		if (currentTime - lastPressTime[1] >= DEBOUNCE_TIME) {
-			lastPressTime[1] = currentTime;
-			Light[1].carCount++;
-			printf("Light 2 car detected: %d\n\r", Light[1].carCount);
-		}
-		EXTI->PR |= BUTTON2;
-	} else if ((EXTI->PR & BUTTON3) != 0) {
-		if (currentTime - lastPressTime[2] >= DEBOUNCE_TIME) {
-			lastPressTime[2] = currentTime;
-			Light[2].carCount++;
-			printf("Light 3 car detected: %d\n\r", Light[2].carCount);
-		}
-		EXTI->PR |= BUTTON3;
-	} else if ((EXTI->PR & BUTTON4) != 0) {
-		if (currentTime - lastPressTime[3] >= DEBOUNCE_TIME) {
-			lastPressTime[3] = currentTime;
-			Light[3].carCount++;
-			printf("Light 4 car detected: %d\n\r", Light[3].carCount);
-		}
-		EXTI->PR |= BUTTON4;
+bool isQueueEmpty() {
+	return (front == -1);
+}
+
+bool isQueueFull() {
+	return ((rear + 1) % MAX_WAITING_PAIR == front);
+}
+
+void enqueue(uint32_t lightPair) {
+	if (!isQueueFull()) {
+		if (front == -1) front = 0;		// Initialize front
+		rear = (rear + 1) % MAX_WAITING_PAIR;
+		waitingQueue[rear] = lightPair;
 	}
 }
+
+uint32_t dequeue() {
+    if (isQueueEmpty()) return -1;  // No waiting pairs
+    uint32_t lightPair = waitingQueue[front];
+    if (front == rear) {  // Queue empty after removing
+        front = rear = -1;
+    } else {
+        front = (front + 1) % MAX_WAITING_PAIR;
+    }
+    return lightPair;
+}
+
+bool timerActive = false;           // Flag to track if commonTimer is running
+uint32_t timerStartTime = 0;        // Start time of active timer
+uint32_t allocatedTime = 0;         // Time allocated to the green light
+uint32_t activeLightPair = -1;		// Track which light pair has the timer
+
+bool waitingForProcess = false;
+bool waitForTimer = false;			// Indicate another light Pair is waiting for the timer
+uint32_t waitingLightPair = -1;  	// Store the next subsequent pairs waiting to run
+uint32_t firstPressTime = 0;
+uint32_t firstPair = -1;
+
+//void changeLight(int lightPair[]) {
+//	// Light1-Light3 request to go, check if timer for opposite side done
+//	if (lightPair[1] == 2) {
+//		while (systickGetMillis() < Light[1].timerEnd ||
+//			   systickGetMillis() < Light[3].timerEnd) {
+//			// Busy-wait until both timers expire
+//			printf("Waiting for timer on Light2-Light4 to end.\n\r");
+//		}
+//		if (stopState(1, 3)) {
+//			startCountdown(0, 2);
+//			goState(0, 2);
+//		}
+//	} else if(lightPair[1] == 3) {
+//		while (systickGetMillis() < Light[0].timerEnd ||
+//			   systickGetMillis() < Light[2].timerEnd) {
+//			// Busy-wait until both timers expire
+//			printf("Waiting for timer on Light1-Light3 to end.\n\r");
+//		}
+//		if (stopState(0, 2)) {
+//			startCountdown(1, 3);
+//			goState(1, 3);
+//		}
+//	}
+//}
 
 // Update the appropriate LED based on state
 void updateLight(int lightNum) {
@@ -100,37 +113,349 @@ void updateLight(int lightNum) {
 	}
 }
 
-void turnYellow(int lightA, int lightB) {
-	Light[lightA].state = YELLOW;
-	Light[lightB].state = YELLOW;
-	updateLight(lightA);
-	updateLight(lightB);
+void go(int lightNum1, int lightNum2) {
+	if (Light[lightNum1].state == RED || Light[lightNum2].state == RED) {
+		// Transition directly from RED to GREEN
+		Light[lightNum1].state = GREEN;
+		Light[lightNum2].state = GREEN;
+		printf("Light %d turned GREEN\n\r", lightNum1 + 1);
+		printf("Light %d turned GREEN\n\r", lightNum2 + 1);
+	} else {
+		printf("Light %d is already GREEN\n\r", lightNum1 + 1);
+		printf("Light %d is already GREEN\n\r", lightNum2 + 1);
+	}
+	updateLight(lightNum1);
+	updateLight(lightNum2);
 }
 
-void changeLightState(int lightNum) {
-    static uint32_t yellowStartTime[4];  // Store timers for each light
+uint32_t stop(int lightNum1, int lightNum2) {
+	if (Light[lightNum1].state == GREEN || Light[lightNum2].state == GREEN) {
+		// Transition directly from GREEN to RED
+		Light[lightNum1].state = RED;
+		Light[lightNum2].state = RED;
+		printf("Light %d turned RED\n\r", lightNum1 + 1);
+		printf("Light %d turned RED\n\r", lightNum2 + 1);
+	} else {
+		printf("Light %d is already RED\n\r", lightNum1 + 1);
+		printf("Light %d is already RED\n\r", lightNum2 + 1);
+	}
+	updateLight(lightNum1);
+	updateLight(lightNum2);
 
-    if (Light[lightNum].state == RED) {
-        // Transition directly from RED to GREEN
-        Light[lightNum].state = GREEN;
-        printf("Light %d turned GREEN\n\r", lightNum + 1);
-    } else if (Light[lightNum].state == GREEN) {
-        // Transition from GREEN to YELLOW
-        if (lightNum == 0 || lightNum == 1) {
-            turnYellow(lightNum, (lightNum == 0) ? 1 : 0);  // Light 0 with 1, or 1 with 0
-        } else if (lightNum == 2 || lightNum == 3) {
-            turnYellow(lightNum, (lightNum == 2) ? 3 : 2);  // Light 2 with 3, or 3 with 2
-        }
-        yellowStartTime[lightNum] = systickGetMillis();  // Store the yellow start time
-    } else if (Light[lightNum].state == YELLOW) {
-        // Check if 1 second has passed for YELLOW
-        if (systickGetMillis() - yellowStartTime[lightNum] >= 1000) {
-            Light[lightNum].state = RED;  // After 1 second, transition to RED
-            printf("Light %d turned RED\n\r", lightNum + 1);
-            updateLight(lightNum);
-        }
+	return 1;
+}
+
+void changeLight(uint32_t light1, uint32_t light2) {
+
+	activeLightPair = light1;		// Register the active light pair
+
+	// Check which light in the pair has higher carCount
+	int carNums = (Light[light1].carCount > Light[light2].carCount) ?
+			Light[light1].carCount : Light[light2].carCount;
+	// Allocate time based on car count - 1 car = 2secs, 2 cars = 3secs, More than 3 = 5secs
+	allocatedTime = (carNums >= 3) ? 5 : (carNums == 2) ? 3 : 2;
+	printf("Light%ld-%ld allocated timer: %ld\n\r", light1+1, light1+3, allocatedTime*1000);
+
+	// Start timer
+	timerStartTime = systickGetMillis();
+	timerActive = true;
+
+    if (light1 == 0 || light1 == 2) {
+        if (stop(1, 3)) {
+			go(0, 2);
+		} else {
+			printf("Could not stop light2-4\n\r");
+		}
+    } else if (light1 == 1 || light1 == 3) {
+        if (stop(0, 2)) {
+			go(1, 3);
+		} else {
+			printf("Could not stop light1-3\n\r");
+		}
     }
+
+    Light[light1].carCount = 0;			// Reset car count
+    Light[light2].carCount = 0;			// Reset car count
 }
+
+// Common timer - manages active light duration
+void commonTimer() {
+	uint32_t currentTime = systickGetMillis();
+
+	if (timerActive && (currentTime - timerStartTime >= allocatedTime * 1000)) {
+		printf("Allocated time finished - Timer released\n\r");
+		timerActive = false;
+		activeLightPair = -1;
+
+		// Check for waiting pairs
+		uint32_t nextPair = dequeue();
+		if (nextPair != -1) {
+			printf("Processing waiting light pair %ld-%ld\n\r", nextPair+1, nextPair+2);
+			changeLight(nextPair, nextPair+2);
+		}
+	}
+}
+
+void SysTick_Runner(void) {
+	uint32_t currentTime = systickGetMillis();
+
+	if (waitingForProcess && (currentTime - firstPressTime >= 3000)) {
+		uint32_t light1, light2;
+		bool pair1_3 = false, pair2_4 = false;
+
+		// Determine which pairs need to be queued
+		if (firstPair == 0 || firstPair == 2) {
+			light1 = 0;
+			light2 = 2;
+			pair2_4 = true;
+		}
+		if (firstPair == 1 || firstPair == 3) {
+			light1 = 1;
+			light2 = 3;
+			pair1_3 = true;
+		}
+
+		// Queue requests
+		if (pair1_3) {
+			enqueue(0);
+			printf("Light 1-3 queued.\n\r");
+		}
+		if (pair2_4) {
+			enqueue(1);
+			printf("Light 2-4 queued.\n\r");
+		}
+
+		// Process the first request in the queue
+		uint32_t nextPair = dequeue();
+		if (nextPair != -1) {
+			printf("Processing Light %ld-%ld \n\r", nextPair+1, nextPair+3);
+			changeLight(nextPair, nextPair+2);
+		}
+
+		waitingForProcess = false;		// Reset after processing
+		firstPair = -1;					// Reset
+	}
+}
+
+//void SysTick_Runner(void) {
+//	uint32_t currentTime = systickGetMillis();
+//
+//	if (waitingForProcess && (currentTime - firstPressTime >= 3000)) {
+//		uint32_t light1, light2;
+//
+//		// Determine which pair should go first
+//		if (firstPair == 0 || firstPair == 2) {
+//			light1 = 0;
+//			light2 = 2;
+//		} else {
+//			light1 = 1;
+//			light2 = 3;
+//		}
+//
+//		// Check if the timer is active
+//		if (timerActive) {
+//			enqueue(light1);
+//			printf("Timer busy. Light %ld-%ld queued.\n\r", light1+1, light2+1);
+//		} else {
+//			printf("Processing Light %ld-%ld \n\r", light1+1, light2+1);
+//			changeLight(light1, light2);
+//		}
+//
+//		waitingForProcess = false;		// Reset after processing
+//		firstPair = -1;					// Reset
+//	}
+//}
+
+// Button input for car detection - Handle button press
+void EXTI15_10_IRQHandler(void) {
+	static uint32_t lastPressTime[BUTTONS] = {0};
+	uint32_t currentTime = systickGetMillis();
+
+	for (int i=0; i<BUTTONS; i++) {
+		if ((EXTI->PR & BUTTON[i]) != 0) {
+			// Check if after 100ms - Prevent debounce that result in consecutive presses
+			if (currentTime - lastPressTime[i] >= DEBOUNCE_TIME) {
+				lastPressTime[i] = currentTime;  	// Update last press time
+				Light[i].carCount++;				// Increment car count
+				printf("Light %d car detected: %d\n\r", i+1, Light[i].carCount);
+
+				if (!waitingForProcess) {			// If this is the first press this round
+					firstPressTime = currentTime;	// Record the time of the first press
+					waitingForProcess = true;		// Place us in the waiting period
+					firstPair = i;					// Pick the first button press
+				}
+			}
+			EXTI->PR |= BUTTON[i];		// Clear interrupt (PR) flag
+		}
+	}
+}
+
+//
+//void SysTick_wait3secs(void) {
+//	uint32_t currentTime = systickGetMillis();
+//
+//	if (waitingForProcess && (currentTime - firstPressTime >= 3000)) {
+//
+//		// Process the pair that was pressed first
+//		if (firstPair == 0 || firstPair == 2) {
+//			printf("Processing Light 1-3 first\n\r");
+//			changeLight(0, 2);  // Process Light 1 & 3
+//			changeLight(1, 3);  // Process Light 2 & 4
+//		} else {
+//			printf("Processing Light 2-4 first\n\r");
+//			changeLight(1, 3);  // Process Light 2 & 4
+//			changeLight(0, 2);  // Process Light 1 & 3
+//		}
+//
+//		waitingForProcess = false;	// Reset after processing
+//	}
+//}
+
+int main() {
+	lights_init();					// Initialize light GPIO registers
+	exti_init();					// Initialize the input interrupts
+	uart2_init();					// Initialize UART
+	systick_init();					// Initialize SysTick
+	map_lights();					// Map the lights
+
+	printf("\n\r ** Program Start **\n\r");
+
+	// Set the initial states of the lights
+//	printf("Set initial light states\n\r");
+//	for (int i=0; i<4; i++) {
+//		updateLight(i);
+//		printf("Light %d is %s\n\r", i + 1, (Light[i].state == GREEN) ? "GREEN" : "RED");
+//	}
+
+	while(1) {}
+}
+//
+//uint32_t lightPair = -1;			// Track which light pair was pressed
+//uint32_t firstPressTime = 0;		// Track when the first button was pressed
+//bool waitingForProcess = false;		// Indicate we're in waiting period
+//
+//// Button input for car detection - Handle button press
+//void EXTI15_10_IRQHandler(void) {
+//	static uint32_t lastPressTime[BUTTON_COUNT] = {0};
+//	uint32_t currentTime = systickGetMillis();
+//
+//	for (int i=0; i<BUTTON_COUNT; i++) {
+//		if ((EXTI->PR & BUTTONS[i]) != 0) {
+//			// Check if after 100ms - Prevent debounce that result in consecutive presses
+//			if (currentTime - lastPressTime[i] >= DEBOUNCE_TIME) {
+//				lastPressTime[i] = currentTime;  	// Update last press time
+//				Light[i].carCount++;				// Increment car count
+//				printf("Light %d car detected: %d\n\r", i+1, Light[i].carCount);
+//
+//				if (!waitingForProcess) {			// If this is the first press this round
+//					firstPressTime = currentTime;	// Record the time
+//					waitingForProcess = true;		// Place us in the waiting period
+//				}
+//				lightPair = i;						// Store the light index
+//			}
+//			EXTI->PR |= BUTTONS[i];		// Clear interrupt (PR) flag
+//		}
+//	}
+//}
+//
+//// Timer interupt check if 3secs have passed - 3secs to allow for multiple presses
+//void wait3secs(void) {
+//	uint32_t currentTime = systickGetMillis();
+//
+//	if (waitingForProcess && (currentTime - firstPressTime >= 3000)) {
+//		changeLight(lightPair);
+//		lightPair = -1;				// Reset after processing
+//		waitingForProcess = false;	// Reset after processing
+//	}
+//}
+
+//// Button input interrupt Handler
+//void EXTI15_10_IRQHandler(void) {
+//	static uint32_t lastPressTime[4] = {0};
+//	uint32_t currentTime = systickGetMillis();
+//
+//	if ((EXTI->PR & BUTTON1) != 0) {
+//		// Check if after 100ms - Prevent debounce that result in consecutive presses
+//		if (currentTime - lastPressTime[0] >= DEBOUNCE_TIME) {
+//			lastPressTime[0] = currentTime;  	// Update last press time
+//			Light[0].carCount++;				// Increment car count
+//			printf("Light 1 car detected: %d\n\r", Light[0].carCount);
+//		}
+//		EXTI->PR |= BUTTON1;		// Clear interrupt (PR) flag
+//	} else if ((EXTI->PR & BUTTON2) != 0) {
+//		if (currentTime - lastPressTime[1] >= DEBOUNCE_TIME) {
+//			lastPressTime[1] = currentTime;
+//			Light[1].carCount++;
+//			printf("Light 2 car detected: %d\n\r", Light[1].carCount);
+//		}
+//		EXTI->PR |= BUTTON2;
+//	} else if ((EXTI->PR & BUTTON3) != 0) {
+//		if (currentTime - lastPressTime[2] >= DEBOUNCE_TIME) {
+//			lastPressTime[2] = currentTime;
+//			Light[2].carCount++;
+//			printf("Light 3 car detected: %d\n\r", Light[2].carCount);
+//		}
+//		EXTI->PR |= BUTTON3;
+//	} else if ((EXTI->PR & BUTTON4) != 0) {
+//		if (currentTime - lastPressTime[3] >= DEBOUNCE_TIME) {
+//			lastPressTime[3] = currentTime;
+//			Light[3].carCount++;
+//			printf("Light 4 car detected: %d\n\r", Light[3].carCount);
+//		}
+//		EXTI->PR |= BUTTON4;
+//	}
+//}
+
+
+//void changeLightState(int lightNum) {
+//    static uint32_t yellowStartTime[4];  // Store timers for each light
+//
+//    if (Light[lightNum].state == RED) {
+//        // Transition directly from RED to GREEN
+//        Light[lightNum].state = GREEN;
+//        printf("Light %d turned GREEN\n\r", lightNum + 1);
+//    } else if (Light[lightNum].state == GREEN) {
+//        // Transition from GREEN to YELLOW
+//        if (lightNum == 0 || lightNum == 1) {
+//            turnYellow(lightNum, (lightNum == 0) ? 1 : 0);  // Light 0 with 1, or 1 with 0
+//        } else if (lightNum == 2 || lightNum == 3) {
+//            turnYellow(lightNum, (lightNum == 2) ? 3 : 2);  // Light 2 with 3, or 3 with 2
+//        }
+//        yellowStartTime[lightNum] = systickGetMillis();  // Store the yellow start time
+//    } else if (Light[lightNum].state == YELLOW) {
+//        // Check if 1 second has passed for YELLOW
+//        if (systickGetMillis() - yellowStartTime[lightNum] >= 1000) {
+//            Light[lightNum].state = RED;  // After 1 second, transition to RED
+//            printf("Light %d turned RED\n\r", lightNum + 1);
+//            updateLight(lightNum);
+//        }
+//    }
+//}
+
+//void changeLightState(int lightNum) {
+//    static uint32_t yellowStartTime[4];  // Store timers for each light
+//
+//    if (Light[lightNum].state == RED) {
+//        // Transition directly from RED to GREEN
+//        Light[lightNum].state = GREEN;
+//        printf("Light %d turned GREEN\n\r", lightNum + 1);
+//    } else if (Light[lightNum].state == GREEN) {
+//        // Transition from GREEN to YELLOW
+//        if (lightNum == 0 || lightNum == 1) {
+//            turnYellow(lightNum, (lightNum == 0) ? 1 : 0);  // Light 0 with 1, or 1 with 0
+//        } else if (lightNum == 2 || lightNum == 3) {
+//            turnYellow(lightNum, (lightNum == 2) ? 3 : 2);  // Light 2 with 3, or 3 with 2
+//        }
+//        yellowStartTime[lightNum] = systickGetMillis();  // Store the yellow start time
+//    } else if (Light[lightNum].state == YELLOW) {
+//        // Check if 1 second has passed for YELLOW
+//        if (systickGetMillis() - yellowStartTime[lightNum] >= 1000) {
+//            Light[lightNum].state = RED;  // After 1 second, transition to RED
+//            printf("Light %d turned RED\n\r", lightNum + 1);
+//            updateLight(lightNum);
+//        }
+//    }
+//}
 
 //void changeLightState(int lightNum) {
 //
@@ -184,71 +509,115 @@ void changeLightState(int lightNum) {
 //    }
 //}
 
-void syncAndChangeLights(int lightA, int lightB, int lightC, int lightD) {
-    // Lights to be serviced
-    changeLightState(lightA);
-    changeLightState(lightB);
-    // Lights being serviced
-    changeLightState(lightC);
-    changeLightState(lightD);
-}
+//void syncAndChangeLights(int lightA, int lightB, int lightC, int lightD) {
+//    // Lights to be serviced
+//    changeLightState(lightA);
+//    changeLightState(lightB);
+//    // Lights being serviced
+//    changeLightState(lightC);
+//    changeLightState(lightD);
+//}
 
+//void turnYellow(int lightA, int lightB) {
+//	Light[lightA].state = YELLOW;
+//	Light[lightB].state = YELLOW;
+//	updateLight(lightA);
+//	updateLight(lightB);
+//}
+//
+//bool firstCarDetect[4] = {false, false, false, false};
+//	uint32_t firstCarTime[4] = {0};
+//
+//	while(1) {
+//		bool pairRequest[2] = {false, false};
+//
+//		// Check if any light needs state update
+//		for (int i=0; i<4; i++) {
+//			// Condition 1
+//			bool thresholdReached = (Light[i].carCount >= THRESHOLD);
+//			// Condition 2:
+//			bool fiveSecElapsed = (firstCarDetect[i] && (systickGetMillis() - firstCarTime[i] >= 5000));
+//			// Allow enough time for button presses for car count
+//			bool wait = (systickGetMillis() - firstCarTime[i] >= 4000);
 
+// Condition 3: Wait 10secs to allow for button presses
+//			bool wait = ((systickGetMillis() - firstCarTime[A] >= 10000) || (systickGetMillis() - firstCarTime[B] >= 10000));
+//
+//			if (wait && (thresholdReached || fiveSecElapsed)) {
+//				if (i == 0 || i == 2){
+//					pairRequest[0] = true;
+//				} else if (i == 1 || i == 3) {
+//					pairRequest[1] = true;
+//				}
+//				Light[i].carCount = 0;			// Reset car count
+//				firstCarDetect[i] = false;		// Reset first car detect flag
+//			}
+//
+//			// If a car is detected and it's the first car, record the time
+//			if (Light[i].carCount > 0 && !firstCarDetect[i]) {
+//				firstCarDetect[i] = true;
+//				firstCarTime[i] = systickGetMillis();
+//			}
+//		}
+//		//printf("Done cycle.\n\r\n\r");
+//		systickDelayMs(1000);		// Delay for 2secs
+//	}
 
-int main() {
-	lights_init();					// Initialize light GPIO registers
-	exti_init();					// Initialize the input interrupts
-	uart2_init();					// Initialize UART
-	systick_init();					// Initialize SysTick
-	map_lights();					// Map the lights
-
-	printf("\n\r ** Program Start **\n\r");
-
-	// Set the initial states of the lights
-	printf("Set initial light states\n\r");
-	for (int i=0; i<4; i++) {
-		updateLight(i);
-		printf("Light %d is %s\n\r", i + 1, (Light[i].state == GREEN) ? "GREEN" : "RED");
-	}
-
-	bool firstCarDetect[4] = {false, false, false, false};
-	uint32_t firstCarTime[4] = {0};
-
-	while(1) {
-		// Check if any light needs state update
-		for (int i=0; i<4; i++) {
-			// Condition 1
-			bool thresholdReached = (Light[i].carCount >= THRESHOLD);
-			// Condition 2:
-			bool fiveSecElapsed = (firstCarDetect[i] && (systickGetMillis() - firstCarTime[i] >= 10000));
-
-			if (thresholdReached || fiveSecElapsed) {
-				// Wait for the previuosly set timer countdown to finish before you change the lights
-				// Synchronize light pairs
-				if (i == 0 || i == 2) {			// Light 1 and 3
-					syncAndChangeLights(0, 2, 1, 3);
-					// Set the timer countdown based on cars detected
-				} else if (i == 1 || i == 3) {
-					syncAndChangeLights(1, 3, 0, 2);	// Light 2 and 4
-				}
-				Light[i].carCount = 0;			// Reset car count
-				firstCarDetect[i] = false;		// Reset first car detect flag
-			}
-
-			// If a car is detected and it's the first car, record the time
-			if (Light[i].carCount > 0 && !firstCarDetect[i]) {
-				firstCarDetect[i] = true;
-				firstCarTime[i] = systickGetMillis();
-			}
-		}
-		// update all lights
-		for (int i=0; i<4; i++) {
-			updateLight(i);
-		}
-		//printf("Done cycle.\n\r\n\r");
-		systickDelayMs(1000);		// Delay for 2secs
-	}
-}
+//int main() {
+//	lights_init();					// Initialize light GPIO registers
+//	exti_init();					// Initialize the input interrupts
+//	uart2_init();					// Initialize UART
+//	systick_init();					// Initialize SysTick
+//	map_lights();					// Map the lights
+//
+//	printf("\n\r ** Program Start **\n\r");
+//
+//	// Set the initial states of the lights
+//	printf("Set initial light states\n\r");
+//	for (int i=0; i<4; i++) {
+//		updateLight(i);
+//		printf("Light %d is %s\n\r", i + 1, (Light[i].state == GREEN) ? "GREEN" : "RED");
+//	}
+//
+//	bool firstCarDetect[4] = {false, false, false, false};
+//	uint32_t firstCarTime[4] = {0};
+//
+//	while(1) {
+//		bool pairChangedAlready[2] = {false, false};
+//
+//		// Check if any light needs state update
+//		for (int i=0; i<4; i++) {
+//			// Condition 1
+//			bool thresholdReached = (Light[i].carCount >= THRESHOLD);
+//			// Condition 2:
+//			bool fiveSecElapsed = (firstCarDetect[i] && (systickGetMillis() - firstCarTime[i] >= 10000));
+//
+//			if (thresholdReached || fiveSecElapsed) {
+//				// Synchronize light pairs
+//				if (i == 0 || i == 2) {			// Light 1 and 3
+//					syncAndChangeLights(0, 2, 1, 3);
+//					// Set the timer countdown based on cars detected
+//				} else if (i == 1 || i == 3) {
+//					syncAndChangeLights(1, 3, 0, 2);	// Light 2 and 4
+//				}
+//				Light[i].carCount = 0;			// Reset car count
+//				firstCarDetect[i] = false;		// Reset first car detect flag
+//			}
+//
+//			// If a car is detected and it's the first car, record the time
+//			if (Light[i].carCount > 0 && !firstCarDetect[i]) {
+//				firstCarDetect[i] = true;
+//				firstCarTime[i] = systickGetMillis();
+//			}
+//		}
+//		// update all lights
+//		for (int i=0; i<4; i++) {
+//			updateLight(i);
+//		}
+//		//printf("Done cycle.\n\r\n\r");
+//		systickDelayMs(1000);		// Delay for 2secs
+//	}
+//}
 
 // Timer countdown for car detected
 //void startCountdown(int lightNum) {

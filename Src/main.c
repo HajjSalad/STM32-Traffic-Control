@@ -116,7 +116,6 @@ void go(int lightNum1, int lightNum2) {
 }
 
 uint32_t amber(int lightNum1, int lightNum2) {
-	printf("In amber function\r\n");
 	if (Light[lightNum1].state == GREEN || Light[lightNum2].state == GREEN) {
 		// Transition from GREEN to YELLOW
 		Light[lightNum1].state = YELLOW;
@@ -132,8 +131,6 @@ uint32_t amber(int lightNum1, int lightNum2) {
 	// Update the Light states
 	updateLight(lightNum1);
 	updateLight(lightNum2);
-
-	printf("Lights updated to YELLOW\r\n");
 
 	return 1;
 }
@@ -173,6 +170,20 @@ void checkGreenLightTimeout() {
 			changeLight(processPair, processPair+2);
 		}
 	}
+
+	if (waitForTimer && (systickGetMillis() - yellowStartTime >= 1000)) {
+		if (waitingLightPair == 0) {
+			stop(1, 3);
+			go(0, 2);
+		} else if (waitingLightPair == 1) {
+			stop(0, 2);
+			go(1, 3);
+		}
+
+		waitForTimer = false;
+		waitingLightPair = -1;
+	}
+
 }
 
 // Handle the command to stop and release the flow of traffic for light change
@@ -195,22 +206,28 @@ void changeLight(uint32_t lightA, uint32_t lightB) {
 	// Stop traffic for the current light pair and release for the next light pair
     if (lightA == 0 || lightA == 2) {
         if (amber(1, 3)) {				// Have to stop the current flow before releasing the next
-			printf("Before delay\r\n");
-			systickDelayMs(1000);
-			printf("After delay\r\n");
-			if (stop(1, 3)) {
-				printf("Changed to YELLOW then RED\r\n");
-				go(0, 2);					// If stop succesful, release the next flow
-			}
+			yellowStartTime = systickGetMillis();
+			waitingLightPair = 0;
+			waitForTimer = true;
+			// printf("Before delay\r\n");
+			// systickDelayMs(1000);
+			// printf("After delay\r\n");
+			// if (stop(1, 3)) {
+			// 	printf("Changed to YELLOW then RED\r\n");
+			// 	go(0, 2);					// If stop succesful, release the next flow
+			// }
 		} else {
 			printf("Could not stop light 2-4.\n\r");
 		}
     } else if (lightA == 1 || lightA == 3) {
         if (amber(0, 2)) {				// Check stop first
-			systickDelayMs(1000);
-			if (stop(0, 2)) {
-				go(1, 3);					// Release on successful stop
-			}
+			yellowStartTime = systickGetMillis();
+			waitingLightPair = 1;
+			waitForTimer = true;
+			// systickDelayMs(1000);
+			// if (stop(0, 2)) {
+			// 	go(1, 3);					// Release on successful stop
+			// }
 		} else {
 			printf("Could not stop light1-3\n\r");
 		}

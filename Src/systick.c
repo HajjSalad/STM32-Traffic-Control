@@ -19,8 +19,9 @@ volatile uint32_t systickMillis = 0;		// Global variable to store milliseconds
 
 void SysTick_Handler(void) {
 	systickMillis++;						// Increment milliseconds counter
-	SysTick_Runner();					// Used to wait for 3 secs
-	commonTimer();
+	checkGreenLightTimeout();				// 
+	SysTick_CheckFirstPressTimeout();		// 
+	
 }
 
 // Configure SysTick

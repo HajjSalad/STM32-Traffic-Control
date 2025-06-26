@@ -14,9 +14,9 @@
 // PC10, PC11, PC12, PC13 for external input interrupt
 void exti_init(void) {
 
-	__disable_irq();			// Disable global interrupts
+	__disable_irq();			    // Disable global interrupts
 
-	RCC->AHB1ENR |= GPIOCEN;	// Enable clock for GPIOC
+	RCC->AHB1ENR |= GPIOCEN;	    // Enable clock for GPIOC
 
 	GPIOC->MODER &= ~(1U<<20);		// PC10 input mode - BUTTON1
 	GPIOC->MODER &= ~(1U<<21);
@@ -57,5 +57,5 @@ void exti_init(void) {
 
 	NVIC_EnableIRQ(EXTI15_10_IRQn);	// Enable EXTI 10-15 lines in NVIC
 
-	__enable_irq();			// Enable the global interrupts
+	__enable_irq();			        // Enable the global interrupts
 }

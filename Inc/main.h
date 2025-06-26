@@ -9,6 +9,7 @@
 #define MAIN_H_
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define BUTTON1				(1U<<10)
 #define BUTTON2				(1U<<11)
@@ -38,7 +39,7 @@ typedef struct {
 	uint32_t timerEnd;			// Timer based on car counts
 } TrafficLight;
 
-void SysTick_Runner(void);
-void commonTimer(void);
+void checkGreenLightTimeout(void);
+void SysTick_CheckFirstPressTimeout(void);
 
 #endif /* MAIN_H_ */

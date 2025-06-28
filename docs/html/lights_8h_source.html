@@ -97,21 +97,54 @@ $(document).ready(function(){initNavTree('lights_8h_source.html',''); initResiza
   <div class="headertitle"><div class="title">lights.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="lights_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * lights.h</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *  Created on: Feb 28, 2025</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *      Author: Hajj</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#ifndef LIGHTS_H_</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#define LIGHTS_H_</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keywordtype">void</span> <a class="code hl_function" href="lights_8h.html#ad98336e38af281911c5f233341f1e6ed">lights_init</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#endif </span><span class="comment">/* LIGHTS_H_ */</span><span class="preprocessor"></span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="ttc" id="alights_8h_html_ad98336e38af281911c5f233341f1e6ed"><div class="ttname"><a href="lights_8h.html#ad98336e38af281911c5f233341f1e6ed">lights_init</a></div><div class="ttdeci">void lights_init(void)</div><div class="ttdef"><b>Definition</b> lights.c:14</div></div>
+<a href="lights_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#ifndef LIGHTS_H_</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#define LIGHTS_H_</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">// Traffic Light states</span></div>
+<div class="foldopen" id="foldopen00010" data-start="{" data-end="};">
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5f">   10</a></span><span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faf80f9a890089d211842d59625e561f88">   11</a></span>    <a class="code hl_enumvalue" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faf80f9a890089d211842d59625e561f88">RED</a>,                <span class="comment">// Stop</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5fae735a848bf82163a19236ead1c3ef2d2">   12</a></span>    <a class="code hl_enumvalue" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5fae735a848bf82163a19236ead1c3ef2d2">YELLOW</a>,             <span class="comment">// Prepare to stop</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faa60bd322f93178d68184e30e162571ca">   13</a></span>    <a class="code hl_enumvalue" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faa60bd322f93178d68184e30e162571ca">GREEN</a>,              <span class="comment">// Go</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faac132f2982b98bcaa3445e535a03ff75">   14</a></span>    <a class="code hl_enumvalue" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faac132f2982b98bcaa3445e535a03ff75">OFF</a>,                <span class="comment">// Light OFF</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>} <a class="code hl_enumeration" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5f">LightState</a>;</div>
+</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// Traffic light structure</span></div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="};">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structTrafficLight.html">   18</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structTrafficLight.html#aa357e7ae8b4f55869251031a9087aa8b">   19</a></span>    <a class="code hl_enumeration" href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5f">LightState</a> <a class="code hl_variable" href="structTrafficLight.html#aa357e7ae8b4f55869251031a9087aa8b">state</a>;           <span class="comment">// Current state of the light</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structTrafficLight.html#abcc4ca7735d29522e7133d3e36255017">   20</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structTrafficLight.html#abcc4ca7735d29522e7133d3e36255017">carCount</a>;               <span class="comment">// Cars detected at the light</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structTrafficLight.html#a2e08441743c0bf68cdc79fcabccae12a">   21</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structTrafficLight.html#a2e08441743c0bf68cdc79fcabccae12a">redPin</a>;                 <span class="comment">// GPIO pin for RED light</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="structTrafficLight.html#a8f7ef1a8da26c736566fecf15d4e0cb4">   22</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structTrafficLight.html#a8f7ef1a8da26c736566fecf15d4e0cb4">greenPin</a>;               <span class="comment">// GPIO pin for GREEN light</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structTrafficLight.html#a777f8cb155d5db74519ae3f7f2079453">   23</a></span>    uint32_t <a class="code hl_variable" href="structTrafficLight.html#a777f8cb155d5db74519ae3f7f2079453">timerEnd</a>;          <span class="comment">// Timer based on car counts</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>} <a class="code hl_struct" href="structTrafficLight.html">TrafficLight</a>;</div>
+</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">extern</span> <a class="code hl_struct" href="structTrafficLight.html">TrafficLight</a> <a class="code hl_variable" href="lights_8h.html#a76404ace8e8a4fc2282150dd846b3123">Light</a>[4];</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keywordtype">void</span> <a class="code hl_function" href="lights_8h.html#ad98336e38af281911c5f233341f1e6ed">lights_init</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#endif </span><span class="comment">/* LIGHTS_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="ttc" id="alights_8h_html_a76404ace8e8a4fc2282150dd846b3123"><div class="ttname"><a href="lights_8h.html#a76404ace8e8a4fc2282150dd846b3123">Light</a></div><div class="ttdeci">TrafficLight Light[4]</div><div class="ttdef"><b>Definition</b> lights.c:8</div></div>
+<div class="ttc" id="alights_8h_html_ad98336e38af281911c5f233341f1e6ed"><div class="ttname"><a href="lights_8h.html#ad98336e38af281911c5f233341f1e6ed">lights_init</a></div><div class="ttdeci">void lights_init(void)</div><div class="ttdef"><b>Definition</b> lights.c:99</div></div>
+<div class="ttc" id="alights_8h_html_aff4e660298d60b77a1fdac63d3747a5f"><div class="ttname"><a href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5f">LightState</a></div><div class="ttdeci">LightState</div><div class="ttdef"><b>Definition</b> lights.h:10</div></div>
+<div class="ttc" id="alights_8h_html_aff4e660298d60b77a1fdac63d3747a5faa60bd322f93178d68184e30e162571ca"><div class="ttname"><a href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faa60bd322f93178d68184e30e162571ca">GREEN</a></div><div class="ttdeci">@ GREEN</div><div class="ttdef"><b>Definition</b> lights.h:13</div></div>
+<div class="ttc" id="alights_8h_html_aff4e660298d60b77a1fdac63d3747a5faac132f2982b98bcaa3445e535a03ff75"><div class="ttname"><a href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faac132f2982b98bcaa3445e535a03ff75">OFF</a></div><div class="ttdeci">@ OFF</div><div class="ttdef"><b>Definition</b> lights.h:14</div></div>
+<div class="ttc" id="alights_8h_html_aff4e660298d60b77a1fdac63d3747a5fae735a848bf82163a19236ead1c3ef2d2"><div class="ttname"><a href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5fae735a848bf82163a19236ead1c3ef2d2">YELLOW</a></div><div class="ttdeci">@ YELLOW</div><div class="ttdef"><b>Definition</b> lights.h:12</div></div>
+<div class="ttc" id="alights_8h_html_aff4e660298d60b77a1fdac63d3747a5faf80f9a890089d211842d59625e561f88"><div class="ttname"><a href="lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faf80f9a890089d211842d59625e561f88">RED</a></div><div class="ttdeci">@ RED</div><div class="ttdef"><b>Definition</b> lights.h:11</div></div>
+<div class="ttc" id="astructTrafficLight_html"><div class="ttname"><a href="structTrafficLight.html">TrafficLight</a></div><div class="ttdef"><b>Definition</b> lights.h:18</div></div>
+<div class="ttc" id="astructTrafficLight_html_a2e08441743c0bf68cdc79fcabccae12a"><div class="ttname"><a href="structTrafficLight.html#a2e08441743c0bf68cdc79fcabccae12a">TrafficLight::redPin</a></div><div class="ttdeci">int redPin</div><div class="ttdef"><b>Definition</b> lights.h:21</div></div>
+<div class="ttc" id="astructTrafficLight_html_a777f8cb155d5db74519ae3f7f2079453"><div class="ttname"><a href="structTrafficLight.html#a777f8cb155d5db74519ae3f7f2079453">TrafficLight::timerEnd</a></div><div class="ttdeci">uint32_t timerEnd</div><div class="ttdef"><b>Definition</b> lights.h:23</div></div>
+<div class="ttc" id="astructTrafficLight_html_a8f7ef1a8da26c736566fecf15d4e0cb4"><div class="ttname"><a href="structTrafficLight.html#a8f7ef1a8da26c736566fecf15d4e0cb4">TrafficLight::greenPin</a></div><div class="ttdeci">int greenPin</div><div class="ttdef"><b>Definition</b> lights.h:22</div></div>
+<div class="ttc" id="astructTrafficLight_html_aa357e7ae8b4f55869251031a9087aa8b"><div class="ttname"><a href="structTrafficLight.html#aa357e7ae8b4f55869251031a9087aa8b">TrafficLight::state</a></div><div class="ttdeci">LightState state</div><div class="ttdef"><b>Definition</b> lights.h:19</div></div>
+<div class="ttc" id="astructTrafficLight_html_abcc4ca7735d29522e7133d3e36255017"><div class="ttname"><a href="structTrafficLight.html#abcc4ca7735d29522e7133d3e36255017">TrafficLight::carCount</a></div><div class="ttdeci">int carCount</div><div class="ttdef"><b>Definition</b> lights.h:20</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

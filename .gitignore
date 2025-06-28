@@ -8,8 +8,6 @@
 /dist/
 /Debug/
 
-# Ignore logs
-*.log
 
 # Ignore editor-specific files
 *.swp

@@ -8,8 +8,7 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-#include <stdbool.h>
-#include <stdint.h>
+
 
 #define BUTTON1				(1U<<10)
 #define BUTTON2				(1U<<11)
@@ -22,22 +21,7 @@
 
 #define MAX_WAITING_PAIR	   2
 
-// Traffic Light states
-typedef enum {
-	RED,				// Stop
-	YELLOW,				// Prepare to stop
-	GREEN,				// Go
-	OFF,				// Light OFF
-} LightState;
 
-// Traffic light structure
-typedef struct {
-	LightState state;			// Current state of the light
-	int carCount;				// Cars detected at the light
-	int redPin;					// GPIO pin for RED light
-	int greenPin;				// GPIO pin for GREEN light
-	uint32_t timerEnd;			// Timer based on car counts
-} TrafficLight;
 
 void checkGreenLightTimeout(void);
 void SysTick_CheckFirstPressTimeout(void);

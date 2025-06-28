@@ -65,7 +65,7 @@ Light 1-3: GREEN (east-west traffic allowed)
 &nbsp;&nbsp;&nbsp;⎔ Resistors - Used to limit current and protect components  
 &nbsp;&nbsp;&nbsp;⎔ Breadboards - Used for prototyping and testing the traffic light system  
 
-#### ⛓️ Hardware Connection  
+### ⛓️ Hardware Connection  
 RGB LED Connections:   
 &nbsp;&nbsp;&nbsp;&nbsp;• Common anode pins connected to ground (active-low configuration)   
 &nbsp;&nbsp;&nbsp;&nbsp;• Red and green channels driven by dedicated GPIO outputs  
@@ -74,7 +74,7 @@ Button Connections:
 &nbsp;&nbsp;&nbsp;&nbsp;• Tactile switches connected to GPIO input pins with internal pull-up resistors  
 &nbsp;&nbsp;&nbsp;&nbsp;• Pressing a button pulls the input low, triggering a vehicle detection interrupt  
 
-**Pin Assignments**:
+### 📍 Pin Assignments
 |   LIGHT   |   RED     |   GREEN   |   BUTTON |
 |-----------|-----------|-----------|----------|
 |  Light 1  |   PB10    |    PB4    |   PC10   |

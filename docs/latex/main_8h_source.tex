@@ -1,0 +1,51 @@
+\doxysection{main.\+h}
+\hypertarget{main_8h_source}{}\label{main_8h_source}\index{Inc/main.h@{Inc/main.h}}
+\mbox{\hyperlink{main_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ main.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ Mar\ 28,\ 2025}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ abdirahmanhajj}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ MAIN\_H\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ MAIN\_H\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ BUTTON1\ \ \ \ \ \ \ \ \ \ \ \ \ (1U<<10)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ BUTTON2\ \ \ \ \ \ \ \ \ \ \ \ \ (1U<<11)}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ BUTTON3\ \ \ \ \ \ \ \ \ \ \ \ \ (1U<<12)}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ BUTTON4\ \ \ \ \ \ \ \ \ \ \ \ \ (1U<<13)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ BUTTONS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 4}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ DEBOUNCE\_TIME\ \ \ \ \ \ \ \ \ 100}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ MAX\_WAITING\_PAIR\ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ Traffic\ Light\ states}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{main_8h_aff4e660298d60b77a1fdac63d3747a5faf80f9a890089d211842d59625e561f88}{RED}},\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{main_8h_aff4e660298d60b77a1fdac63d3747a5fae735a848bf82163a19236ead1c3ef2d2}{YELLOW}},\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prepare\ to\ stop}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{main_8h_aff4e660298d60b77a1fdac63d3747a5faa60bd322f93178d68184e30e162571ca}{GREEN}},\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Go}}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{main_8h_aff4e660298d60b77a1fdac63d3747a5faac132f2982b98bcaa3445e535a03ff75}{OFF}},\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Light\ OFF}}
+\DoxyCodeLine{00031\ \}\ \mbox{\hyperlink{main_8h_aff4e660298d60b77a1fdac63d3747a5f}{LightState}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{comment}{//\ Traffic\ light\ structure}}
+\DoxyCodeLine{00034\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{main_8h_aff4e660298d60b77a1fdac63d3747a5f}{LightState}}\ \mbox{\hyperlink{struct_traffic_light_aa357e7ae8b4f55869251031a9087aa8b}{state}};\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Current\ state\ of\ the\ light}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_traffic_light_abcc4ca7735d29522e7133d3e36255017}{carCount}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Cars\ detected\ at\ the\ light}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_traffic_light_a2e08441743c0bf68cdc79fcabccae12a}{redPin}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GPIO\ pin\ for\ RED\ light}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_traffic_light_a8f7ef1a8da26c736566fecf15d4e0cb4}{greenPin}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GPIO\ pin\ for\ GREEN\ light}}
+\DoxyCodeLine{00039\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{struct_traffic_light_a777f8cb155d5db74519ae3f7f2079453}{timerEnd}};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Timer\ based\ on\ car\ counts}}
+\DoxyCodeLine{00040\ \}\ \mbox{\hyperlink{struct_traffic_light}{TrafficLight}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_a1a7c82518370351f861d90c068366406}{checkGreenLightTimeout}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00043\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_a3de66a327f68a9a6fdd1fd663efcf66c}{SysTick\_CheckFirstPressTimeout}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ MAIN\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

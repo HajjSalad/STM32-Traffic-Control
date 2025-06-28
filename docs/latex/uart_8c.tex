@@ -1,0 +1,116 @@
+\doxysection{Src/uart.c File Reference}
+\hypertarget{uart_8c}{}\label{uart_8c}\index{Src/uart.c@{Src/uart.c}}
+{\ttfamily \#include "{}stm32f446xx.\+h"{}}\newline
+{\ttfamily \#include "{}uart.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8c_a4fa1263231bb75f3fdee49f04b1441bc}{GPIOAEN}}~(1U$<$$<$0)
+\item 
+\#define \mbox{\hyperlink{uart_8c_a2cbd34d04f5b47ae4215e08c7dd676cd}{UART2\+EN}}~(1U$<$$<$17)
+\item 
+\#define \mbox{\hyperlink{uart_8c_a33e90b554e956f63783de3ec55fccb2a}{CR1\+\_\+\+TE}}~(1U$<$$<$3)
+\item 
+\#define \mbox{\hyperlink{uart_8c_a525a42341ba9922554fe28824e666719}{CR1\+\_\+\+RE}}~(1U$<$$<$2)
+\item 
+\#define \mbox{\hyperlink{uart_8c_ac8ec7755fac5d7c52ed289bafa08c334}{CR1\+\_\+\+UE}}~(1U$<$$<$13)
+\item 
+\#define \mbox{\hyperlink{uart_8c_ad887ad91dd88c31c68a8d8af35e1487a}{SR\+\_\+\+TXE}}~(1U$<$$<$7)
+\item 
+\#define \mbox{\hyperlink{uart_8c_a7d5ce7b79462bbfb630ee53075540b65}{SYS\+\_\+\+FREQ}}~16000000
+\item 
+\#define \mbox{\hyperlink{uart_8c_a984d9308ef1436992660562d2f2457bc}{APB1\+\_\+\+CLK}}~\mbox{\hyperlink{uart_8c_a7d5ce7b79462bbfb630ee53075540b65}{SYS\+\_\+\+FREQ}}
+\item 
+\#define \mbox{\hyperlink{uart_8c_a2c7ed0283bd6f2f9d791860d6254ef4f}{UART\+\_\+\+BAUDRATE}}~115200
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{uart_8c_abc513dd972081ae765b6949a62872eb7}{\+\_\+\+\_\+io\+\_\+putchar}} (int ch)
+\item 
+void \mbox{\hyperlink{uart_8c_a2dbf78bac0a26fd3cc86e0d5d509c546}{uart2\+\_\+init}} (void)
+\item 
+void \mbox{\hyperlink{uart_8c_af9b28b865fd728e30020ea7cc7b5ce44}{uart2\+\_\+write}} (int ch)
+\end{DoxyCompactItemize}
+
+
+\label{doc-define-members}
+\Hypertarget{uart_8c_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{uart_8c_a984d9308ef1436992660562d2f2457bc}\index{uart.c@{uart.c}!APB1\_CLK@{APB1\_CLK}}
+\index{APB1\_CLK@{APB1\_CLK}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{APB1\_CLK}{APB1\_CLK}}
+{\footnotesize\ttfamily \label{uart_8c_a984d9308ef1436992660562d2f2457bc} 
+\#define APB1\+\_\+\+CLK~\mbox{\hyperlink{uart_8c_a7d5ce7b79462bbfb630ee53075540b65}{SYS\+\_\+\+FREQ}}}
+
+\Hypertarget{uart_8c_a525a42341ba9922554fe28824e666719}\index{uart.c@{uart.c}!CR1\_RE@{CR1\_RE}}
+\index{CR1\_RE@{CR1\_RE}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{CR1\_RE}{CR1\_RE}}
+{\footnotesize\ttfamily \label{uart_8c_a525a42341ba9922554fe28824e666719} 
+\#define CR1\+\_\+\+RE~(1U$<$$<$2)}
+
+\Hypertarget{uart_8c_a33e90b554e956f63783de3ec55fccb2a}\index{uart.c@{uart.c}!CR1\_TE@{CR1\_TE}}
+\index{CR1\_TE@{CR1\_TE}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{CR1\_TE}{CR1\_TE}}
+{\footnotesize\ttfamily \label{uart_8c_a33e90b554e956f63783de3ec55fccb2a} 
+\#define CR1\+\_\+\+TE~(1U$<$$<$3)}
+
+\Hypertarget{uart_8c_ac8ec7755fac5d7c52ed289bafa08c334}\index{uart.c@{uart.c}!CR1\_UE@{CR1\_UE}}
+\index{CR1\_UE@{CR1\_UE}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{CR1\_UE}{CR1\_UE}}
+{\footnotesize\ttfamily \label{uart_8c_ac8ec7755fac5d7c52ed289bafa08c334} 
+\#define CR1\+\_\+\+UE~(1U$<$$<$13)}
+
+\Hypertarget{uart_8c_a4fa1263231bb75f3fdee49f04b1441bc}\index{uart.c@{uart.c}!GPIOAEN@{GPIOAEN}}
+\index{GPIOAEN@{GPIOAEN}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{GPIOAEN}{GPIOAEN}}
+{\footnotesize\ttfamily \label{uart_8c_a4fa1263231bb75f3fdee49f04b1441bc} 
+\#define GPIOAEN~(1U$<$$<$0)}
+
+\Hypertarget{uart_8c_ad887ad91dd88c31c68a8d8af35e1487a}\index{uart.c@{uart.c}!SR\_TXE@{SR\_TXE}}
+\index{SR\_TXE@{SR\_TXE}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{SR\_TXE}{SR\_TXE}}
+{\footnotesize\ttfamily \label{uart_8c_ad887ad91dd88c31c68a8d8af35e1487a} 
+\#define SR\+\_\+\+TXE~(1U$<$$<$7)}
+
+\Hypertarget{uart_8c_a7d5ce7b79462bbfb630ee53075540b65}\index{uart.c@{uart.c}!SYS\_FREQ@{SYS\_FREQ}}
+\index{SYS\_FREQ@{SYS\_FREQ}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{SYS\_FREQ}{SYS\_FREQ}}
+{\footnotesize\ttfamily \label{uart_8c_a7d5ce7b79462bbfb630ee53075540b65} 
+\#define SYS\+\_\+\+FREQ~16000000}
+
+\Hypertarget{uart_8c_a2cbd34d04f5b47ae4215e08c7dd676cd}\index{uart.c@{uart.c}!UART2EN@{UART2EN}}
+\index{UART2EN@{UART2EN}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{UART2EN}{UART2EN}}
+{\footnotesize\ttfamily \label{uart_8c_a2cbd34d04f5b47ae4215e08c7dd676cd} 
+\#define UART2\+EN~(1U$<$$<$17)}
+
+\Hypertarget{uart_8c_a2c7ed0283bd6f2f9d791860d6254ef4f}\index{uart.c@{uart.c}!UART\_BAUDRATE@{UART\_BAUDRATE}}
+\index{UART\_BAUDRATE@{UART\_BAUDRATE}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{UART\_BAUDRATE}{UART\_BAUDRATE}}
+{\footnotesize\ttfamily \label{uart_8c_a2c7ed0283bd6f2f9d791860d6254ef4f} 
+\#define UART\+\_\+\+BAUDRATE~115200}
+
+
+
+\label{doc-func-members}
+\Hypertarget{uart_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{uart_8c_abc513dd972081ae765b6949a62872eb7}\index{uart.c@{uart.c}!\_\_io\_putchar@{\_\_io\_putchar}}
+\index{\_\_io\_putchar@{\_\_io\_putchar}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{\_\_io\_putchar()}{\_\_io\_putchar()}}
+{\footnotesize\ttfamily \label{uart_8c_abc513dd972081ae765b6949a62872eb7} 
+int \+\_\+\+\_\+io\+\_\+putchar (\begin{DoxyParamCaption}\item[{int}]{ch}{}\end{DoxyParamCaption})}
+
+\Hypertarget{uart_8c_a2dbf78bac0a26fd3cc86e0d5d509c546}\index{uart.c@{uart.c}!uart2\_init@{uart2\_init}}
+\index{uart2\_init@{uart2\_init}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{uart2\_init()}{uart2\_init()}}
+{\footnotesize\ttfamily \label{uart_8c_a2dbf78bac0a26fd3cc86e0d5d509c546} 
+void uart2\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{uart_8c_af9b28b865fd728e30020ea7cc7b5ce44}\index{uart.c@{uart.c}!uart2\_write@{uart2\_write}}
+\index{uart2\_write@{uart2\_write}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{uart2\_write()}{uart2\_write()}}
+{\footnotesize\ttfamily \label{uart_8c_af9b28b865fd728e30020ea7cc7b5ce44} 
+void uart2\+\_\+write (\begin{DoxyParamCaption}\item[{int}]{ch}{}\end{DoxyParamCaption})}
+

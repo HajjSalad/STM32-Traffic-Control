@@ -1,6 +1,6 @@
 var main_8h =
 [
-    [ "TrafficLight", "struct_traffic_light.html", "struct_traffic_light" ],
+    [ "TrafficLight", "structTrafficLight.html", "structTrafficLight" ],
     [ "BUTTON1", "main_8h.html#a8b8426d5c8d4a02dc1b15353d4bc613d", null ],
     [ "BUTTON2", "main_8h.html#acad5ba277242dbcd68edaff5f550f29e", null ],
     [ "BUTTON3", "main_8h.html#a64f0a5235b4b24fb04f54fb437011c75", null ],

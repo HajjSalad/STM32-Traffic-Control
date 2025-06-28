@@ -83,5 +83,4 @@ Button Connections:
 |  Light 4  |   PB14    |    PB13   |   PC13   |
 
 ### Demo
-| ![Demo 1](./camera.gif) | ![Demo 2](./terminal.gif) |  
-|:------------------:|:------------------:|
+![Demo 1](./demo.gif)

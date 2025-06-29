@@ -1,21 +1,23 @@
 
-
-#include "stm32f446xx.h"
 #include "uart.h"
 #include "lights.h"
 #include "systick.h"
 
-TrafficLight Light[4];			// Instantiate 4 traffic light
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "stm32f446xx.h"
+
+TrafficLight Light[NUM_LIGHTS];			// Instantiate 4 traffic light
 
 // Populate Light and Map Light to Register addresses
 void map_lights(void) {
-	// fields: state, carCount, redPin, greenPin. TimeEnd field not included. 
-	Light[0] = (TrafficLight){GREEN, 0, 10, 4};		// High traffic - start with GREEN
-	Light[1] = (TrafficLight){RED, 0, 5, 3};		// Low traffic - start with RED
-	Light[2] = (TrafficLight){GREEN, 0, 2, 1};		// High traffic - start with GREEN
-	Light[3] = (TrafficLight){RED, 0, 14, 13};		// Low traffic - start with RED
+	// fields: state, carCount, redPin, greenPin. 
+	Light[0] = (TrafficLight){GREEN, 0, PIN_LIGHT1_RED, PIN_LIGHT1_GREEN};		// High traffic - start with GREEN
+	Light[1] = (TrafficLight){RED, 0, PIN_LIGHT2_RED, PIN_LIGHT2_GREEN};		// Low traffic - start with RED
+	Light[2] = (TrafficLight){GREEN, 0, PIN_LIGHT3_RED, PIN_LIGHT3_GREEN};		// High traffic - start with GREEN
+	Light[3] = (TrafficLight){RED, 0, PIN_LIGHT4_RED, PIN_LIGHT4_GREEN};		// Low traffic - start with RED
 }
-
 
 // Update the appropriate LED through the GPIO output based on state
 void updateLight(int lightNum) {
@@ -46,12 +48,12 @@ void go(int lightNum1, int lightNum2) {
 		// Transition directly from RED to GREEN
 		Light[lightNum1].state = GREEN;
 		Light[lightNum2].state = GREEN;
-		printf("Light %d turned GREEN\n\r", lightNum1 + 1);
-		printf("Light %d turned GREEN\n\r", lightNum2 + 1);
+		LOG("Light %d turned GREEN", lightNum1 + 1);
+		LOG("Light %d turned GREEN", lightNum2 + 1);
 	} else {
 		// Light already GREEN - Nothing to do
-		printf("Light %d is already GREEN\n\r", lightNum1 + 1);
-		printf("Light %d is already GREEN\n\r", lightNum2 + 1);
+		LOG("Light %d is already GREEN", lightNum1 + 1);
+		LOG("Light %d is already GREEN", lightNum2 + 1);
 	}
 	// Update the Light states
 	updateLight(lightNum1);
@@ -63,12 +65,12 @@ uint32_t amber(int lightNum1, int lightNum2) {
 		// Transition from GREEN to YELLOW
 		Light[lightNum1].state = YELLOW;
 		Light[lightNum2].state = YELLOW;
-		printf("Light %d turned YELLOW\n\r", lightNum1 + 1);
-		printf("Light %d turned YELLOW\n\r", lightNum2 + 1);
+		LOG("Light %d turned YELLOW", lightNum1 + 1);
+		LOG("Light %d turned YELLOW", lightNum2 + 1);
 	} else {
 		// Light already RED - Nothing to do
-		printf("Light %d is already RED\n\r", lightNum1 + 1);
-		printf("Light %d is already RED\n\r", lightNum2 + 1);
+		LOG("Light %d is already RED", lightNum1 + 1);
+		LOG("Light %d is already RED", lightNum2 + 1);
 	}
 
 	// Update the Light states
@@ -84,8 +86,8 @@ uint32_t stop(int lightNum1, int lightNum2) {
 		// Transition from YELLOW to RED
 		Light[lightNum1].state = RED;
 		Light[lightNum2].state = RED;
-		printf("Light %d turned RED\n\r", lightNum1 + 1);
-		printf("Light %d turned RED\n\r", lightNum2 + 1);
+		LOG("Light %d turned RED", lightNum1 + 1);
+		LOG("Light %d turned RED", lightNum2 + 1);
 	} 
 
 	// Update the Light states
@@ -93,6 +95,13 @@ uint32_t stop(int lightNum1, int lightNum2) {
 	updateLight(lightNum2);
 
 	return 1;
+}
+
+void lights_set_initial_state(void) {
+	for (int i=0; i<NUM_LIGHTS; i++) {
+		updateLight(i);
+		LOG("Light %d is %s", i + 1, (Light[i].state == GREEN) ? "GREEN" : "RED");
+	}
 }
 
 // Initialize the lights output pins

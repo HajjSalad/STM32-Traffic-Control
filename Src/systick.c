@@ -1,14 +1,11 @@
-/*
- * systick.c
- *
- *  Created on: Feb 22, 2025
- *      Author: Hajj
- */
 
-#include "stm32f446xx.h"
+#include "uart.h"
 #include "systick.h"
-#include "main.h"
+#include "controller.h"
 
+#include <stdio.h>
+#include <stdint.h>
+#include "stm32f446xx.h"
 
 #define SYSTICK_LOAD_VAL		16000
 #define CTRL_ENABLE				(1U<<0)

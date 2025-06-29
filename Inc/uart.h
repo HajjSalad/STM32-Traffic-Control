@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include "stm32f446xx.h"
 
+#define LOG(fmt, ...)  printf( fmt "\n\r", ##__VA_ARGS__)
+
 void uart2_init(void);
 void uart2_write(int ch);
 

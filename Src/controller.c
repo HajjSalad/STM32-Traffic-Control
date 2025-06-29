@@ -1,9 +1,31 @@
 
+#include "uart.h"
+#include "queue.h"
+#include "lights.h"
+#include "systick.h"
+#include "controller.h"
 
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "stm32f446xx.h"
 
 // Buttons to simulation sensor for car detection
 const uint32_t BUTTON[BUTTONS] = {BUTTON1, BUTTON2, BUTTON3, BUTTON4};
 
+bool timerActive = false;           // Flag to track if commonTimer is running
+uint32_t timerStartTime = 0;        // Start time of active timer
+uint32_t yellowStartTime = 0;
+uint32_t allocatedTime = 0;         // Time allocated for green light
+uint32_t activeLightPair = -1;		// Track which light pair has the timer
+
+bool waitingForProcess = false;		// 
+bool waitForTimer = false;			// Indicate another light Pair is waiting for the timer
+uint32_t waitingLightPair = -1;  	// Store the next subsequent pairs waiting to run
+bool firstPress = false;
+uint32_t firstPressTime = 0;
+uint32_t firstPair = -1;			// Store the pair that was pressed first
+uint32_t secondPair = -1;			// Store the pair that was pressed second
 
 // Monitor the GREEN light duration for the active light pair and transition when time expires
 // Function periodically invoked by SysTick_Handler to determine if allocated time has elapsed
@@ -12,14 +34,14 @@ void checkGreenLightTimeout() {
 
 	// Check if time allocated elapse
 	if (timerActive && (currentTime - timerStartTime >= allocatedTime * 1000)) {
-		printf("Allocated time finished - Timer released\r\n\n");
+		LOG("Allocated time finished - Timer released");
 		timerActive = false;
 		activeLightPair = -1;
 
 		// Check for waiting pairs in the queue
 		uint32_t processPair = queue_dequeue();
 		if (processPair != -1) {
-			printf("Processing waiting light pair %ld-%ld\n\r", processPair+1, processPair+3);
+			LOG("Processing waiting light pair %ld-%ld", processPair+1, processPair+3);
 			changeLight(processPair, processPair+2);
 		}
 	}
@@ -50,7 +72,7 @@ void changeLight(uint32_t lightA, uint32_t lightB) {
 	// Allocate time based on car count
 	// 1 car = 2secs, 2 cars = 3secs, More than 3 = 5secs
 	allocatedTime = (carNums >= 3) ? 5 : (carNums == 2) ? 3 : 2;
-	printf("Light %ld-%ld allocated timer: %ld\n\r", lightA+1, lightA+3, allocatedTime*1000);
+	LOG("Light %ld-%ld allocated timer: %ld", lightA+1, lightA+3, allocatedTime*1000);
 
 	// Start timer for the GREEN light duration - timer handled by checkGreenLightTimeout()
 	timerStartTime = systickGetMillis();
@@ -62,15 +84,15 @@ void changeLight(uint32_t lightA, uint32_t lightB) {
 			yellowStartTime = systickGetMillis();
 			waitingLightPair = 0;
 			waitForTimer = true;
-			// printf("Before delay\r\n");
+			// LOG("Before delay\r\n");
 			// systickDelayMs(1000);
-			// printf("After delay\r\n");
+			// LOG("After delay\r\n");
 			// if (stop(1, 3)) {
-			// 	printf("Changed to YELLOW then RED\r\n");
+			// 	LOG("Changed to YELLOW then RED\r\n");
 			// 	go(0, 2);					// If stop succesful, release the next flow
 			// }
 		} else {
-			printf("Could not stop light 2-4.\n\r");
+			LOG("Could not stop light 2-4.");
 		}
     } else if (lightA == 1 || lightA == 3) {
         if (amber(0, 2)) {				// Check stop first
@@ -82,7 +104,7 @@ void changeLight(uint32_t lightA, uint32_t lightB) {
 			// 	go(1, 3);					// Release on successful stop
 			// }
 		} else {
-			printf("Could not stop light1-3\n\r");
+			LOG("Could not stop light1-3");
 		}
     }
 	// Reset car counts
@@ -104,27 +126,27 @@ void SysTick_CheckFirstPressTimeout(void) {
 		// Determine which pairs need to be queued first
 		if (firstPair == 0 || firstPair == 2) {				// If Light 1 or 3
 			queue_enqueue(0);										// Queue Light pair 1-3
-			printf("Light 1-3 queued.\n\r");
+			LOG("Light 1-3 queued.");
 			if (secondPair != -1) {							// Check if second pair requested
 				queue_enqueue(1);									// Queue Light pair 2-4
-				printf("Light 2-4 queued.\n\r");
+				LOG("Light 2-4 queued.");
 			}
 		} else if (firstPair == 1 || firstPair == 3) {		// If Light 2 or 4
 			queue_enqueue(1);
-			printf("Light 2-4 queued.\n\r");
+			LOG("Light 2-4 queued.");
 			if (secondPair != -1) {							// Check if second pair requested
 				queue_enqueue(0);
-				printf("Light 1-3 queued.\n\r");
+				LOG("Light 1-3 queued.");
 			}
 		}
 
 		// Process the first request in the queue
 		uint32_t processPair = queue_dequeue();
 		if (processPair != -1) {
-			printf("Processing Light %ld-%ld.\n\r", processPair+1, processPair+3);
+			LOG("Processing Light %ld-%ld.", processPair+1, processPair+3);
 			changeLight(processPair, processPair+2);
 		} else {
-			printf("Nothing to process.\r\n");
+			LOG("Nothing to process.");
 		}
 
 		// Reset after processing
@@ -145,7 +167,7 @@ void EXTI15_10_IRQHandler(void) {
 			if (currentTime - lastPressTime[i] >= DEBOUNCE_TIME) {
 				lastPressTime[i] = currentTime;  	// Update last press time
 				Light[i].carCount++;				// Increment car count
-				printf("Light %d car detected: %d\n\r", i+1, Light[i].carCount);
+				LOG("Light %d car detected: %d", i+1, Light[i].carCount);
 
 				// Record details of the first press - Use it to create 3secs delay to allow for user button input
 				if (!firstPress) {					// If this is the first press this round

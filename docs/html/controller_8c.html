@@ -95,7 +95,16 @@ $(document).ready(function(){initNavTree('controller_8c.html',''); initResizable
   <div class="headertitle"><div class="title">controller.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
+<div class="textblock"><code>#include &quot;<a class="el" href="uart_8h_source.html">uart.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="queue_8h_source.html">queue.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="lights_8h_source.html">lights.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="systick_8h_source.html">systick.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="controller_8h_source.html">controller.h</a>&quot;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &quot;stm32f446xx.h&quot;</code><br />
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a748f601f624718b8606bcc1f3f1ac520" id="r_a748f601f624718b8606bcc1f3f1ac520"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a748f601f624718b8606bcc1f3f1ac520">checkGreenLightTimeout</a> ()</td></tr>
@@ -109,8 +118,32 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a7a35faa78a2ed8bf320dff5de69bde12" id="r_a7a35faa78a2ed8bf320dff5de69bde12"><td class="memItemLeft" align="right" valign="top">const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a7a35faa78a2ed8bf320dff5de69bde12">BUTTON</a> [<a class="el" href="main_8h.html#a2a2f690f8bdeeb4003203ff5e3edaffc">BUTTONS</a>] = {<a class="el" href="main_8h.html#a8b8426d5c8d4a02dc1b15353d4bc613d">BUTTON1</a>, <a class="el" href="main_8h.html#acad5ba277242dbcd68edaff5f550f29e">BUTTON2</a>, <a class="el" href="main_8h.html#a64f0a5235b4b24fb04f54fb437011c75">BUTTON3</a>, <a class="el" href="main_8h.html#aaa07b2fc71aa0e26b4576b43ba001a32">BUTTON4</a>}</td></tr>
+<tr class="memitem:a7a35faa78a2ed8bf320dff5de69bde12" id="r_a7a35faa78a2ed8bf320dff5de69bde12"><td class="memItemLeft" align="right" valign="top">const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a7a35faa78a2ed8bf320dff5de69bde12">BUTTON</a> [<a class="el" href="controller_8h.html#a2a2f690f8bdeeb4003203ff5e3edaffc">BUTTONS</a>] = {<a class="el" href="controller_8h.html#a8b8426d5c8d4a02dc1b15353d4bc613d">BUTTON1</a>, <a class="el" href="controller_8h.html#acad5ba277242dbcd68edaff5f550f29e">BUTTON2</a>, <a class="el" href="controller_8h.html#a64f0a5235b4b24fb04f54fb437011c75">BUTTON3</a>, <a class="el" href="controller_8h.html#aaa07b2fc71aa0e26b4576b43ba001a32">BUTTON4</a>}</td></tr>
 <tr class="separator:a7a35faa78a2ed8bf320dff5de69bde12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81eabbf1af7fe815558382ad1cc286f6" id="r_a81eabbf1af7fe815558382ad1cc286f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a81eabbf1af7fe815558382ad1cc286f6">timerActive</a> = false</td></tr>
+<tr class="separator:a81eabbf1af7fe815558382ad1cc286f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533db96ffa5738e3059f8c274c4f13dc" id="r_a533db96ffa5738e3059f8c274c4f13dc"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a533db96ffa5738e3059f8c274c4f13dc">timerStartTime</a> = 0</td></tr>
+<tr class="separator:a533db96ffa5738e3059f8c274c4f13dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32559b3207701d130f5b84936695afdc" id="r_a32559b3207701d130f5b84936695afdc"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a32559b3207701d130f5b84936695afdc">yellowStartTime</a> = 0</td></tr>
+<tr class="separator:a32559b3207701d130f5b84936695afdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27c722e482229cd4568440f7f3ec0a57" id="r_a27c722e482229cd4568440f7f3ec0a57"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a27c722e482229cd4568440f7f3ec0a57">allocatedTime</a> = 0</td></tr>
+<tr class="separator:a27c722e482229cd4568440f7f3ec0a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b01580d4af53ba27ea0fefe6e066901" id="r_a9b01580d4af53ba27ea0fefe6e066901"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a9b01580d4af53ba27ea0fefe6e066901">activeLightPair</a> = -1</td></tr>
+<tr class="separator:a9b01580d4af53ba27ea0fefe6e066901"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b6cf42da3ecbf7011418459e678a1e3" id="r_a7b6cf42da3ecbf7011418459e678a1e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a7b6cf42da3ecbf7011418459e678a1e3">waitingForProcess</a> = false</td></tr>
+<tr class="separator:a7b6cf42da3ecbf7011418459e678a1e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3112a6aca8b81fe93adcd728bfc567fc" id="r_a3112a6aca8b81fe93adcd728bfc567fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a3112a6aca8b81fe93adcd728bfc567fc">waitForTimer</a> = false</td></tr>
+<tr class="separator:a3112a6aca8b81fe93adcd728bfc567fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0925e9d0a58f05d253ac29e672becb35" id="r_a0925e9d0a58f05d253ac29e672becb35"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a0925e9d0a58f05d253ac29e672becb35">waitingLightPair</a> = -1</td></tr>
+<tr class="separator:a0925e9d0a58f05d253ac29e672becb35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e8f74feb92aabc6e3d5d953b9b920f8" id="r_a4e8f74feb92aabc6e3d5d953b9b920f8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a4e8f74feb92aabc6e3d5d953b9b920f8">firstPress</a> = false</td></tr>
+<tr class="separator:a4e8f74feb92aabc6e3d5d953b9b920f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f844fb34ae24df38a5cdc0b1187c317" id="r_a7f844fb34ae24df38a5cdc0b1187c317"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a7f844fb34ae24df38a5cdc0b1187c317">firstPressTime</a> = 0</td></tr>
+<tr class="separator:a7f844fb34ae24df38a5cdc0b1187c317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b7c9f9793abbe1b9da86309ac5cf96a" id="r_a7b7c9f9793abbe1b9da86309ac5cf96a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a7b7c9f9793abbe1b9da86309ac5cf96a">firstPair</a> = -1</td></tr>
+<tr class="separator:a7b7c9f9793abbe1b9da86309ac5cf96a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a5778d48132e77792e0d28fddeb9440" id="r_a1a5778d48132e77792e0d28fddeb9440"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8c.html#a1a5778d48132e77792e0d28fddeb9440">secondPair</a> = -1</td></tr>
+<tr class="separator:a1a5778d48132e77792e0d28fddeb9440"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a87b0ffd8362d0519384a2d11e9744730" name="a87b0ffd8362d0519384a2d11e9744730"></a>
@@ -196,6 +229,34 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a9b01580d4af53ba27ea0fefe6e066901" name="a9b01580d4af53ba27ea0fefe6e066901"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b01580d4af53ba27ea0fefe6e066901">&#9670;&#160;</a></span>activeLightPair</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t activeLightPair = -1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a27c722e482229cd4568440f7f3ec0a57" name="a27c722e482229cd4568440f7f3ec0a57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27c722e482229cd4568440f7f3ec0a57">&#9670;&#160;</a></span>allocatedTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t allocatedTime = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7a35faa78a2ed8bf320dff5de69bde12" name="a7a35faa78a2ed8bf320dff5de69bde12"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a35faa78a2ed8bf320dff5de69bde12">&#9670;&#160;</a></span>BUTTON</h2>
 
@@ -203,7 +264,147 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const uint32_t BUTTON[<a class="el" href="main_8h.html#a2a2f690f8bdeeb4003203ff5e3edaffc">BUTTONS</a>] = {<a class="el" href="main_8h.html#a8b8426d5c8d4a02dc1b15353d4bc613d">BUTTON1</a>, <a class="el" href="main_8h.html#acad5ba277242dbcd68edaff5f550f29e">BUTTON2</a>, <a class="el" href="main_8h.html#a64f0a5235b4b24fb04f54fb437011c75">BUTTON3</a>, <a class="el" href="main_8h.html#aaa07b2fc71aa0e26b4576b43ba001a32">BUTTON4</a>}</td>
+          <td class="memname">const uint32_t BUTTON[<a class="el" href="controller_8h.html#a2a2f690f8bdeeb4003203ff5e3edaffc">BUTTONS</a>] = {<a class="el" href="controller_8h.html#a8b8426d5c8d4a02dc1b15353d4bc613d">BUTTON1</a>, <a class="el" href="controller_8h.html#acad5ba277242dbcd68edaff5f550f29e">BUTTON2</a>, <a class="el" href="controller_8h.html#a64f0a5235b4b24fb04f54fb437011c75">BUTTON3</a>, <a class="el" href="controller_8h.html#aaa07b2fc71aa0e26b4576b43ba001a32">BUTTON4</a>}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7b7c9f9793abbe1b9da86309ac5cf96a" name="a7b7c9f9793abbe1b9da86309ac5cf96a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b7c9f9793abbe1b9da86309ac5cf96a">&#9670;&#160;</a></span>firstPair</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t firstPair = -1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4e8f74feb92aabc6e3d5d953b9b920f8" name="a4e8f74feb92aabc6e3d5d953b9b920f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e8f74feb92aabc6e3d5d953b9b920f8">&#9670;&#160;</a></span>firstPress</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool firstPress = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f844fb34ae24df38a5cdc0b1187c317" name="a7f844fb34ae24df38a5cdc0b1187c317"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f844fb34ae24df38a5cdc0b1187c317">&#9670;&#160;</a></span>firstPressTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t firstPressTime = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a5778d48132e77792e0d28fddeb9440" name="a1a5778d48132e77792e0d28fddeb9440"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a5778d48132e77792e0d28fddeb9440">&#9670;&#160;</a></span>secondPair</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t secondPair = -1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a81eabbf1af7fe815558382ad1cc286f6" name="a81eabbf1af7fe815558382ad1cc286f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81eabbf1af7fe815558382ad1cc286f6">&#9670;&#160;</a></span>timerActive</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool timerActive = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a533db96ffa5738e3059f8c274c4f13dc" name="a533db96ffa5738e3059f8c274c4f13dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a533db96ffa5738e3059f8c274c4f13dc">&#9670;&#160;</a></span>timerStartTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t timerStartTime = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3112a6aca8b81fe93adcd728bfc567fc" name="a3112a6aca8b81fe93adcd728bfc567fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3112a6aca8b81fe93adcd728bfc567fc">&#9670;&#160;</a></span>waitForTimer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool waitForTimer = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7b6cf42da3ecbf7011418459e678a1e3" name="a7b6cf42da3ecbf7011418459e678a1e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b6cf42da3ecbf7011418459e678a1e3">&#9670;&#160;</a></span>waitingForProcess</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool waitingForProcess = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0925e9d0a58f05d253ac29e672becb35" name="a0925e9d0a58f05d253ac29e672becb35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0925e9d0a58f05d253ac29e672becb35">&#9670;&#160;</a></span>waitingLightPair</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t waitingLightPair = -1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a32559b3207701d130f5b84936695afdc" name="a32559b3207701d130f5b84936695afdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32559b3207701d130f5b84936695afdc">&#9670;&#160;</a></span>yellowStartTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t yellowStartTime = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">

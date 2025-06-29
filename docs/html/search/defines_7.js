@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['threshold_0',['THRESHOLD',['../main_8h.html#a4679d8ea8690999a6c6c7c0cb245c879',1,'main.h']]]
+  ['num_5flights_0',['NUM_LIGHTS',['../lights_8h.html#a59ce09f1ecc86341f668475f4aaeffca',1,'lights.h']]]
 ];

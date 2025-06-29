@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['off_0',['OFF',['../lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faac132f2982b98bcaa3445e535a03ff75',1,'lights.h']]]
+  ['num_5flights_0',['NUM_LIGHTS',['../lights_8h.html#a59ce09f1ecc86341f668475f4aaeffca',1,'lights.h']]]
 ];

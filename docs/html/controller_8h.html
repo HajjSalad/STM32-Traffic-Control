@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>STM32 Traffic Control: Inc/main.h File Reference</title>
+<title>STM32 Traffic Control: Inc/controller.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('main_8h.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('controller_8h.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -92,37 +92,43 @@ $(document).ready(function(){initNavTree('main_8h.html',''); initResizable(); })
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">main.h File Reference</div></div>
+  <div class="headertitle"><div class="title">controller.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p><a href="main_8h_source.html">Go to the source code of this file.</a></p>
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &quot;stm32f446xx.h&quot;</code><br />
+</div>
+<p><a href="controller_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a8b8426d5c8d4a02dc1b15353d4bc613d" id="r_a8b8426d5c8d4a02dc1b15353d4bc613d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a8b8426d5c8d4a02dc1b15353d4bc613d">BUTTON1</a>&#160;&#160;&#160;(1U&lt;&lt;10)</td></tr>
+<tr class="memitem:a8b8426d5c8d4a02dc1b15353d4bc613d" id="r_a8b8426d5c8d4a02dc1b15353d4bc613d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a8b8426d5c8d4a02dc1b15353d4bc613d">BUTTON1</a>&#160;&#160;&#160;(1U&lt;&lt;10)</td></tr>
 <tr class="separator:a8b8426d5c8d4a02dc1b15353d4bc613d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acad5ba277242dbcd68edaff5f550f29e" id="r_acad5ba277242dbcd68edaff5f550f29e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#acad5ba277242dbcd68edaff5f550f29e">BUTTON2</a>&#160;&#160;&#160;(1U&lt;&lt;11)</td></tr>
+<tr class="memitem:acad5ba277242dbcd68edaff5f550f29e" id="r_acad5ba277242dbcd68edaff5f550f29e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#acad5ba277242dbcd68edaff5f550f29e">BUTTON2</a>&#160;&#160;&#160;(1U&lt;&lt;11)</td></tr>
 <tr class="separator:acad5ba277242dbcd68edaff5f550f29e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64f0a5235b4b24fb04f54fb437011c75" id="r_a64f0a5235b4b24fb04f54fb437011c75"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a64f0a5235b4b24fb04f54fb437011c75">BUTTON3</a>&#160;&#160;&#160;(1U&lt;&lt;12)</td></tr>
+<tr class="memitem:a64f0a5235b4b24fb04f54fb437011c75" id="r_a64f0a5235b4b24fb04f54fb437011c75"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a64f0a5235b4b24fb04f54fb437011c75">BUTTON3</a>&#160;&#160;&#160;(1U&lt;&lt;12)</td></tr>
 <tr class="separator:a64f0a5235b4b24fb04f54fb437011c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa07b2fc71aa0e26b4576b43ba001a32" id="r_aaa07b2fc71aa0e26b4576b43ba001a32"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#aaa07b2fc71aa0e26b4576b43ba001a32">BUTTON4</a>&#160;&#160;&#160;(1U&lt;&lt;13)</td></tr>
+<tr class="memitem:aaa07b2fc71aa0e26b4576b43ba001a32" id="r_aaa07b2fc71aa0e26b4576b43ba001a32"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#aaa07b2fc71aa0e26b4576b43ba001a32">BUTTON4</a>&#160;&#160;&#160;(1U&lt;&lt;13)</td></tr>
 <tr class="separator:aaa07b2fc71aa0e26b4576b43ba001a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a2f690f8bdeeb4003203ff5e3edaffc" id="r_a2a2f690f8bdeeb4003203ff5e3edaffc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a2a2f690f8bdeeb4003203ff5e3edaffc">BUTTONS</a>&#160;&#160;&#160;4</td></tr>
+<tr class="memitem:a2a2f690f8bdeeb4003203ff5e3edaffc" id="r_a2a2f690f8bdeeb4003203ff5e3edaffc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a2a2f690f8bdeeb4003203ff5e3edaffc">BUTTONS</a>&#160;&#160;&#160;4</td></tr>
 <tr class="separator:a2a2f690f8bdeeb4003203ff5e3edaffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4679d8ea8690999a6c6c7c0cb245c879" id="r_a4679d8ea8690999a6c6c7c0cb245c879"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a4679d8ea8690999a6c6c7c0cb245c879">THRESHOLD</a>&#160;&#160;&#160;3</td></tr>
+<tr class="memitem:a4679d8ea8690999a6c6c7c0cb245c879" id="r_a4679d8ea8690999a6c6c7c0cb245c879"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a4679d8ea8690999a6c6c7c0cb245c879">THRESHOLD</a>&#160;&#160;&#160;3</td></tr>
 <tr class="separator:a4679d8ea8690999a6c6c7c0cb245c879"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00aef9e8dd001a49f8717031d84b2c6c" id="r_a00aef9e8dd001a49f8717031d84b2c6c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a00aef9e8dd001a49f8717031d84b2c6c">DEBOUNCE_TIME</a>&#160;&#160;&#160;100</td></tr>
+<tr class="memitem:a00aef9e8dd001a49f8717031d84b2c6c" id="r_a00aef9e8dd001a49f8717031d84b2c6c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a00aef9e8dd001a49f8717031d84b2c6c">DEBOUNCE_TIME</a>&#160;&#160;&#160;100</td></tr>
 <tr class="separator:a00aef9e8dd001a49f8717031d84b2c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1da14641e84c8f33c8d03118c7068e4" id="r_af1da14641e84c8f33c8d03118c7068e4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#af1da14641e84c8f33c8d03118c7068e4">MAX_WAITING_PAIR</a>&#160;&#160;&#160;2</td></tr>
+<tr class="memitem:af1da14641e84c8f33c8d03118c7068e4" id="r_af1da14641e84c8f33c8d03118c7068e4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#af1da14641e84c8f33c8d03118c7068e4">MAX_WAITING_PAIR</a>&#160;&#160;&#160;2</td></tr>
 <tr class="separator:af1da14641e84c8f33c8d03118c7068e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1a7c82518370351f861d90c068366406" id="r_a1a7c82518370351f861d90c068366406"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a1a7c82518370351f861d90c068366406">checkGreenLightTimeout</a> (void)</td></tr>
+<tr class="memitem:a1a7c82518370351f861d90c068366406" id="r_a1a7c82518370351f861d90c068366406"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a1a7c82518370351f861d90c068366406">checkGreenLightTimeout</a> (void)</td></tr>
 <tr class="separator:a1a7c82518370351f861d90c068366406"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3de66a327f68a9a6fdd1fd663efcf66c" id="r_a3de66a327f68a9a6fdd1fd663efcf66c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a3de66a327f68a9a6fdd1fd663efcf66c">SysTick_CheckFirstPressTimeout</a> (void)</td></tr>
+<tr class="memitem:a3de66a327f68a9a6fdd1fd663efcf66c" id="r_a3de66a327f68a9a6fdd1fd663efcf66c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a3de66a327f68a9a6fdd1fd663efcf66c">SysTick_CheckFirstPressTimeout</a> (void)</td></tr>
 <tr class="separator:a3de66a327f68a9a6fdd1fd663efcf66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87b0ffd8362d0519384a2d11e9744730" id="r_a87b0ffd8362d0519384a2d11e9744730"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller_8h.html#a87b0ffd8362d0519384a2d11e9744730">changeLight</a> (uint32_t lightA, uint32_t lightB)</td></tr>
+<tr class="separator:a87b0ffd8362d0519384a2d11e9744730"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a8b8426d5c8d4a02dc1b15353d4bc613d" name="a8b8426d5c8d4a02dc1b15353d4bc613d"></a>
@@ -238,6 +244,34 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a87b0ffd8362d0519384a2d11e9744730" name="a87b0ffd8362d0519384a2d11e9744730"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87b0ffd8362d0519384a2d11e9744730">&#9670;&#160;</a></span>changeLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void changeLight </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>lightA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>lightB</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1a7c82518370351f861d90c068366406" name="a1a7c82518370351f861d90c068366406"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a7c82518370351f861d90c068366406">&#9670;&#160;</a></span>checkGreenLightTimeout()</h2>
 
@@ -279,7 +313,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_f93dfce691d792349f1c14ede440e2e6.html">Inc</a></li><li class="navelem"><a class="el" href="main_8h.html">main.h</a></li>
+    <li class="navelem"><a class="el" href="dir_f93dfce691d792349f1c14ede440e2e6.html">Inc</a></li><li class="navelem"><a class="el" href="controller_8h.html">controller.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

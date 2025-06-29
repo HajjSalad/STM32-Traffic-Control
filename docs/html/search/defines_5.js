@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['max_5fwaiting_5fpair_0',['MAX_WAITING_PAIR',['../main_8h.html#af1da14641e84c8f33c8d03118c7068e4',1,'main.h']]]
+  ['log_0',['LOG',['../uart_8h.html#a388edf12256bf73c3a8ee9734c3bd841',1,'uart.h']]]
 ];

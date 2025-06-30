@@ -1,48 +1,48 @@
 
-#include "uart.h"
-#include "lights.h"
-#include "systick.h"
-
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "stm32f446xx.h"
 
-TrafficLight Light[NUM_LIGHTS];			// Instantiate 4 traffic light
+#include "uart.h"
+#include "lights.h"
+#include "systick.h"
+
+static TrafficLight Light[NUM_LIGHTS];			// Instantiate 4 traffic light
 
 // Populate Light and Map Light to Register addresses
 void map_lights(void) {
 	// fields: state, carCount, redPin, greenPin. 
 	Light[0] = (TrafficLight){GREEN, 0, PIN_LIGHT1_RED, PIN_LIGHT1_GREEN};		// High traffic - start with GREEN
-	Light[1] = (TrafficLight){RED, 0, PIN_LIGHT2_RED, PIN_LIGHT2_GREEN};		// Low traffic - start with RED
+	Light[1] = (TrafficLight){RED,   0, PIN_LIGHT2_RED, PIN_LIGHT2_GREEN};		// Low traffic - start with RED
 	Light[2] = (TrafficLight){GREEN, 0, PIN_LIGHT3_RED, PIN_LIGHT3_GREEN};		// High traffic - start with GREEN
-	Light[3] = (TrafficLight){RED, 0, PIN_LIGHT4_RED, PIN_LIGHT4_GREEN};		// Low traffic - start with RED
+	Light[3] = (TrafficLight){RED,   0, PIN_LIGHT4_RED, PIN_LIGHT4_GREEN};		// Low traffic - start with RED
 }
 
 // Update the appropriate LED through the GPIO output based on state
-void updateLight(int lightNum) {
-	switch (Light[lightNum].state) {
+void lights_update(const TrafficLight *light) {
+	switch (light->state) {
 		case RED:
-			GPIOB->BSRR = (1U << (Light[lightNum].redPin + 16));  	// RED LED ON
-			GPIOB->BSRR = (1U << Light[lightNum].greenPin);			// GREEN LED OFF
+			GPIOB->BSRR = (1U << (light->redPin + 16));  	// RED LED ON
+			GPIOB->BSRR = (1U << light->greenPin);			// GREEN LED OFF
 			break;
 		case YELLOW:
-			// Turn ON both RED and GREEN to get YELLOW
-			GPIOB->BSRR = ((1U << (Light[lightNum].redPin + 16)) | (1U <<(Light[lightNum].greenPin + 16)));
+			// Turn ON both RED and GREEN to get YELLOW 
+			GPIOB->BSRR = ((1U << (light->redPin + 16)) | (1U <<(light->greenPin + 16)));
 			break;
 		case GREEN:
-			GPIOB->BSRR = (1U << (Light[lightNum].greenPin + 16));  // GREEN LED ON
-			GPIOB->BSRR = (1U << Light[lightNum].redPin);			// RED LED OFF
+			GPIOB->BSRR = (1U << (light->greenPin + 16));  // GREEN LED ON
+			GPIOB->BSRR = (1U << light->redPin);			// RED LED OFF
 			break;
 		case OFF:
 			// Turn off both RED and GREEN to turn Light off
-			GPIOB->BSRR = ((1U << Light[lightNum].redPin) | (1U << Light[lightNum].greenPin));
+			GPIOB->BSRR = ((1U << light->redPin) | (1U << light->greenPin));
 			break;
 	}
 }
 
 // Release the currently stopped flow of Light pairs
-void go(int lightNum1, int lightNum2) {
+void lights_set_green(int lightNum1, int lightNum2) {
 	// Check if the light pair is RED
 	if (Light[lightNum1].state == RED || Light[lightNum2].state == RED) {
 		// Transition directly from RED to GREEN
@@ -60,7 +60,7 @@ void go(int lightNum1, int lightNum2) {
 	updateLight(lightNum2);
 }
 
-uint32_t amber(int lightNum1, int lightNum2) {
+uint32_t lights_set_yellow(int lightNum1, int lightNum2) {
 	if (Light[lightNum1].state == GREEN || Light[lightNum2].state == GREEN) {
 		// Transition from GREEN to YELLOW
 		Light[lightNum1].state = YELLOW;
@@ -80,7 +80,7 @@ uint32_t amber(int lightNum1, int lightNum2) {
 	return 1;
 }
 
-uint32_t stop(int lightNum1, int lightNum2) {
+uint32_t lights_set_red(int lightNum1, int lightNum2) {
 	// Check if the Light pair is YELLOW
 	if (Light[lightNum1].state == YELLOW || Light[lightNum2].state == YELLOW) {
 		// Transition from YELLOW to RED
@@ -99,7 +99,7 @@ uint32_t stop(int lightNum1, int lightNum2) {
 
 void lights_set_initial_state(void) {
 	for (int i=0; i<NUM_LIGHTS; i++) {
-		updateLight(i);
+		lights_update(&Light[i]);
 		LOG("Light %d is %s", i + 1, (Light[i].state == GREEN) ? "GREEN" : "RED");
 	}
 }
@@ -135,3 +135,8 @@ void lights_init(void) {
 	GPIOB->MODER &= ~(1U<<27);
 }
 
+
+
+Where to pick up:
+	- lights_set_green
+	

@@ -1,13 +1,13 @@
 
+#include <stdio.h>
+#include <stdint.h>
+#include "stm32f446xx.h"
+
 #include "uart.h"
 #include "exti.h"
 #include "queue.h"
 #include "lights.h"
 #include "systick.h"
-
-#include <stdio.h>
-#include <stdint.h>
-#include "stm32f446xx.h"
 
 static void system_init(void) {
 	lights_init();					// Initialize light GPIO registers

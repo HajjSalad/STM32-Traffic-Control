@@ -1,14 +1,14 @@
 
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "stm32f446xx.h"
+
 #include "uart.h"
 #include "queue.h"
 #include "lights.h"
 #include "systick.h"
 #include "controller.h"
-
-#include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include "stm32f446xx.h"
 
 // Buttons to simulation sensor for car detection
 const uint32_t BUTTON[BUTTONS] = {BUTTON1, BUTTON2, BUTTON3, BUTTON4};
@@ -34,7 +34,7 @@ void checkGreenLightTimeout() {
 
 	// Check if time allocated elapse
 	if (timerActive && (currentTime - timerStartTime >= allocatedTime * 1000)) {
-		LOG("Allocated time finished - Timer released");
+		LOG("Allocated time finished - Timer released\r\n");
 		timerActive = false;
 		activeLightPair = -1;
 

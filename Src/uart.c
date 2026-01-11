@@ -1,12 +1,15 @@
-/*
- * uart.c
- *
- *  Created on: Feb 20, 2025
- *      Author: Hajj
- */
+/**
+ * @file uart.c
+ * @brief UART drive implementation
+ * 
+ * This file provides low-level UART2 initialization and transmit functionality.
+ * The UART is primarily used for serial logging and debug output cia `printf()`
+ * redirectiion.
+*/
 
 #include "stm32f446xx.h"
 #include "uart.h"
+#include <stdint.h>
 
 #define GPIOAEN				(1U<<0)
 #define UART2EN				(1U<<17)
@@ -20,15 +23,31 @@
 #define APB1_CLK			SYS_FREQ
 #define UART_BAUDRATE		115200
 
+// Function Prototypes
 static void uart_set_baudrate(USART_TypeDef *USARTx, uint32_t PeriphClk, uint32_t BaudRate);
 static uint16_t compute_uart_bd(uint32_t PeriphClk, uint32_t BaudRate);
 
+/**
+ * @brief Low-level character output function for printf redirection.
+ * 
+ * This function is called by the C standard library to output characters
+ * when using fucntions such as `printf()`. Characters are transmitted 
+ * over UART2.
+ * 
+ * @param ch 	Character to transmit
+ * @return 		The transmitted character
+*/
 int __io_putchar(int ch) {
 	uart2_write(ch);
 	return ch;
 }
 
-// PA2 tx, PA3 rx -> UART2
+/**
+ * @brief Initialize UART2 peripheral.
+ * 
+ * UART2 is configured for basic asynchronous communication and is used
+ * primarily for logging and debugging.
+*/
 void uart2_init(void) {
 
 	RCC->AHB1ENR |= GPIOAEN;			// Enable clock GPIOA
@@ -51,16 +70,28 @@ void uart2_init(void) {
 	USART2->CR1 |= CR1_UE;				// Enable USART Module
 }
 
+/**
+ * @brief Transmit a single character over UART2.
+ * 
+ * This function blocks until the transmit data register is empty,
+ * then writes the provided character to the UART data register.
+ * 
+ * @param ch  Character to transmit.
+*/
 void uart2_write(int ch) {
 	while(!(USART2->SR & SR_TXE)){};	// Make sure the transmit data register is empty.
 	USART2->DR = (ch & 0xFF);			// Write to transmit data register
 }
 
-static void uart_set_baudrate(USART_TypeDef *USARTx, uint32_t PeriphClk, uint32_t BaudRate) {
-
+/** @brief Configure the baud rate for the USART peripheral */
+static void uart_set_baudrate(USART_TypeDef *USARTx, 
+							  uint32_t PeriphClk, 
+							  uint32_t BaudRate) 
+{
 	USARTx->BRR = compute_uart_bd(PeriphClk, BaudRate);
 }
 
+/** @brief Compute USART baud rate register (BRR) value */
 static uint16_t compute_uart_bd(uint32_t PeriphClk, uint32_t BaudRate) {
 
 	return ((PeriphClk + (BaudRate / 2U)) / BaudRate);

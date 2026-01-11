@@ -48,11 +48,11 @@ void checkGreenLightTimeout() {
 
 	if (waitForTimer && (systickGetMillis() - yellowStartTime >= 1000)) {
 		if (waitingLightPair == 0) {
-			stop(1, 3);
-			go(0, 2);
+			lights_set_red(1, 3);
+			lights_set_green(0, 2);
 		} else if (waitingLightPair == 1) {
-			stop(0, 2);
-			go(1, 3);
+			lights_set_red(0, 2);
+			lights_set_green(1, 3);
 		}
 
 		waitForTimer = false;
@@ -80,7 +80,7 @@ void changeLight(uint32_t lightA, uint32_t lightB) {
 
 	// Stop traffic for the current light pair and release for the next light pair
     if (lightA == 0 || lightA == 2) {
-        if (amber(1, 3)) {				// Have to stop the current flow before releasing the next
+        if (lights_set_yellow(1, 3)) {				// Have to stop the current flow before releasing the next
 			yellowStartTime = systickGetMillis();
 			waitingLightPair = 0;
 			waitForTimer = true;
@@ -95,7 +95,7 @@ void changeLight(uint32_t lightA, uint32_t lightB) {
 			LOG("Could not stop light 2-4.");
 		}
     } else if (lightA == 1 || lightA == 3) {
-        if (amber(0, 2)) {				// Check stop first
+        if (lights_set_yellow(0, 2)) {				// Check stop first
 			yellowStartTime = systickGetMillis();
 			waitingLightPair = 1;
 			waitForTimer = true;
@@ -112,6 +112,7 @@ void changeLight(uint32_t lightA, uint32_t lightB) {
     Light[lightB].carCount = 0;			
 }
 
+// Station 2
 // Allow 3 seconds for user button input - Prevent processing after first press
 // Function periodically invoked by SysTick_Handler to determine if 3secs window elapsed
 void SysTick_CheckFirstPressTimeout(void) {
@@ -156,6 +157,7 @@ void SysTick_CheckFirstPressTimeout(void) {
 	}
 }
 
+// Station 1
 // Button input for car detection - Handle button press
 void EXTI15_10_IRQHandler(void) {
 	static uint32_t lastPressTime[BUTTONS] = {0};

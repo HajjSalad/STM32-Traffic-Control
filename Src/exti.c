@@ -1,9 +1,10 @@
-/*
- * exti.c
- *
- *  Created on: Mar 3, 2025
- *      Author: Hajj
- */
+/**
+ * @file exti.c
+ * @brief External Interrupt (EXTI) configuration for vehicle detection inputs. 
+ * 
+ * This file configures GPIO input pins and EXTI lines used for detecting
+ * button press events representing vehicle arrivals at traffic lights.
+*/
 
 #include "exti.h"
 #include "stm32f446xx.h"
@@ -11,7 +12,19 @@
 #define GPIOCEN		(1U<<2)
 #define SYSCFGEN	(1U<<14)
 
-// PC10, PC11, PC12, PC13 for external input interrupt
+/**
+ * @brief Initializes external interrupt inputs for vehicle detection buttons.
+ * 
+ * This function configures GPIOC pins PC10–PC13 as input signals with
+ * internal pull-up resistors and maps them to EXTI lines 10–13. 
+ * Falling edge triggers are enabled to detect button press events.
+ * 
+ * The EXTI lines are unmasked and routed through the NVIC using the
+ * EXTI15_10 interrupt channel.
+ * 
+ * @note Global interrupts are temporarily disabled during configuration
+ *       to prevent spurious interrupt execution.
+*/
 void exti_init(void) {
 
 	__disable_irq();			    // Disable global interrupts

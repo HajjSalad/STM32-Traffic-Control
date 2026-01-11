@@ -1,4 +1,17 @@
-
+/**
+ * @file lights.c
+ * @brief Traffic light control and GPIO management.
+ * 
+ * This module implements the logic and GPIO control for a multi-direction
+ * traffic system.
+ * It:
+ * 	- Manages traffic light states
+ * 	- Handles state transitions
+ * 	- Updates LED outputs using atomic GPIO operations
+ * 
+ * The module operates on a global array of `TrafficLight` structures, where
+ * each element represents one traffic light at the intersection.
+*/
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -7,11 +20,26 @@
 #include "uart.h"
 #include "lights.h"
 #include "systick.h"
+/**
+ * @brief Array of Traffic light structures.
+ * 
+ * @note The array size is defined by NUM_LIGHTS (4 in this case)
+*/
+TrafficLight Light[NUM_LIGHTS];			// Instantiate 4 traffic light
 
-static TrafficLight Light[NUM_LIGHTS];			// Instantiate 4 traffic light
-
-// Populate Light and Map Light to Register addresses
-void map_lights(void) {
+/**
+ * @brief Initialize and map traffic light configuration
+ * 
+ * Populates the global 'Light' array with initial traffic light states,
+ * car counts, and GPIO pin mappings. 
+ * Each traffic light is assigned its corresponding RED and GREEN GPIO pins
+ * and an initial state based on expected traffic flow.
+ * 
+ * High-traffic directions are initialized to GREEM, while low-traffic 
+ * directions start at RED.
+*/
+void map_lights(void) 
+{
 	// fields: state, carCount, redPin, greenPin. 
 	Light[0] = (TrafficLight){GREEN, 0, PIN_LIGHT1_RED, PIN_LIGHT1_GREEN};		// High traffic - start with GREEN
 	Light[1] = (TrafficLight){RED,   0, PIN_LIGHT2_RED, PIN_LIGHT2_GREEN};		// Low traffic - start with RED
@@ -20,7 +48,19 @@ void map_lights(void) {
 }
 
 // Update the appropriate LED through the GPIO output based on state
-void lights_update(const TrafficLight *light) {
+/**
+ * @brief Update traffic light LEDs based on the current light state.
+ * 
+ * Sets or resets the RED and GREEN GPIO outputs for a single traffic
+ * light using the GPIOB BSRR register. 
+ * The LED behavior is determined by the `state` field of the provided 
+ * TrafficLight structure. 
+ *
+ * @param light Pointer to a TrafficLight structure containing the current
+ * 				state and GPIO pin mappings
+*/
+void lights_update(const TrafficLight *light) 
+{
 	switch (light->state) {
 		case RED:
 			GPIOB->BSRR = (1U << (light->redPin + 16));  	// RED LED ON
@@ -31,7 +71,7 @@ void lights_update(const TrafficLight *light) {
 			GPIOB->BSRR = ((1U << (light->redPin + 16)) | (1U <<(light->greenPin + 16)));
 			break;
 		case GREEN:
-			GPIOB->BSRR = (1U << (light->greenPin + 16));  // GREEN LED ON
+			GPIOB->BSRR = (1U << (light->greenPin + 16));   // GREEN LED ON
 			GPIOB->BSRR = (1U << light->redPin);			// RED LED OFF
 			break;
 		case OFF:
@@ -41,8 +81,20 @@ void lights_update(const TrafficLight *light) {
 	}
 }
 
-// Release the currently stopped flow of Light pairs
-void lights_set_green(int lightNum1, int lightNum2) {
+/**
+ * @brief Transition a pair of traffic lights to GREEN.
+ * 
+ * Transitions the specified pair of traffic lights to GREEN state if 
+ * currently RED. If GREEN, no state change is performed.
+ * 
+ * After updating the logical state, the corresponding GPIO outputs are 
+ * updated via `lights_update()`.
+ * 
+ * @param lightNum1 Index of the first traffic light in the pair
+ * @param lightNum2 Index of the second traffic light in the pair
+*/
+void lights_set_green(int lightNum1, int lightNum2) 
+{
 	// Check if the light pair is RED
 	if (Light[lightNum1].state == RED || Light[lightNum2].state == RED) {
 		// Transition directly from RED to GREEN
@@ -56,11 +108,26 @@ void lights_set_green(int lightNum1, int lightNum2) {
 		LOG("Light %d is already GREEN", lightNum2 + 1);
 	}
 	// Update the Light states
-	updateLight(lightNum1);
-	updateLight(lightNum2);
+	lights_update(&Light[lightNum1]);
+	lights_update(&Light[lightNum2]);
 }
 
-uint32_t lights_set_yellow(int lightNum1, int lightNum2) {
+/**
+ * @brief Transition a pair of traffic lights from GREEN to YELLOW
+ * 
+ * If light in the specified pair is currently GREEN, they are transitioned 
+ * to YELLOW state. If RED, no state change is performed.
+ * 
+ * After updating the logical state, the corresponding GPIO outputs are 
+ * updated via `lights_update()`.
+ * 
+ * @param lightNum1 Index of the first traffic light in the pair
+ * @param lightNum2 Index of the second traffic light in the pair
+ * 
+ * @return 
+*/
+uint32_t lights_set_yellow(int lightNum1, int lightNum2) 
+{
 	if (Light[lightNum1].state == GREEN || Light[lightNum2].state == GREEN) {
 		// Transition from GREEN to YELLOW
 		Light[lightNum1].state = YELLOW;
@@ -74,12 +141,26 @@ uint32_t lights_set_yellow(int lightNum1, int lightNum2) {
 	}
 
 	// Update the Light states
-	updateLight(lightNum1);
-	updateLight(lightNum2);
+	lights_update(&Light[lightNum1]);
+	lights_update(&Light[lightNum2]);
 
 	return 1;
 }
 
+/**
+ * @brief Transition a pair of traffic lights from YELLOW to RED
+ * 
+ * If light in the specified pair is currently YELLOW, they are transitioned 
+ * to RED state.
+ * 
+ * After updating the logical state, the corresponding GPIO outputs are 
+ * updated via `lights_update()`.
+ * 
+ * @param lightNum1 Index of the first traffic light in the pair
+ * @param lightNum2 Index of the second traffic light in the pair
+ * 
+ * @return 
+*/
 uint32_t lights_set_red(int lightNum1, int lightNum2) {
 	// Check if the Light pair is YELLOW
 	if (Light[lightNum1].state == YELLOW || Light[lightNum2].state == YELLOW) {
@@ -91,12 +172,13 @@ uint32_t lights_set_red(int lightNum1, int lightNum2) {
 	} 
 
 	// Update the Light states
-	updateLight(lightNum1);
-	updateLight(lightNum2);
+	lights_update(&Light[lightNum1]);
+	lights_update(&Light[lightNum2]);
 
 	return 1;
 }
 
+/** @brief Set all traffic lights to their initial states */
 void lights_set_initial_state(void) {
 	for (int i=0; i<NUM_LIGHTS; i++) {
 		lights_update(&Light[i]);
@@ -104,7 +186,15 @@ void lights_set_initial_state(void) {
 	}
 }
 
-// Initialize the lights output pins
+/**
+ * @brief Initializes GPIO output pins
+ * 
+ * This function enables the required GPIO peripheral clocks and configures 
+ * the GPIO pins connected to the traffic light LEDs as digital outputs.
+ * 
+ * @note Pins are configured in push-pull output mode with default speed 
+ * 		 and no internal pull-up or pull-down resistors.
+*/
 void lights_init(void) {
 	RCC->AHB1ENR |= (1U<<0);		// Enable clock GPIOA
 	RCC->AHB1ENR |= (1U<<1);		// Enable clock GPIOB
@@ -135,8 +225,4 @@ void lights_init(void) {
 	GPIOB->MODER &= ~(1U<<27);
 }
 
-
-
-Where to pick up:
-	- lights_set_green
 	

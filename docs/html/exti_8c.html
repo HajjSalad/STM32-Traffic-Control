@@ -95,6 +95,9 @@ $(document).ready(function(){initNavTree('exti_8c.html',''); initResizable(); })
   <div class="headertitle"><div class="title">exti.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>External Interrupt (EXTI) configuration for vehicle detection inputs.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="exti_8h_source.html">exti.h</a>&quot;</code><br />
 <code>#include &quot;stm32f446xx.h&quot;</code><br />
 </div><table class="memberdecls">
@@ -108,9 +111,13 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a748e7f56878e1dc0eedfd4da358cfd5f" id="r_a748e7f56878e1dc0eedfd4da358cfd5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="exti_8c.html#a748e7f56878e1dc0eedfd4da358cfd5f">exti_init</a> (void)</td></tr>
+<tr class="memdesc:a748e7f56878e1dc0eedfd4da358cfd5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes external interrupt inputs for vehicle detection buttons.  <br /></td></tr>
 <tr class="separator:a748e7f56878e1dc0eedfd4da358cfd5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>External Interrupt (EXTI) configuration for vehicle detection inputs. </p>
+<p>This file configures GPIO input pins and EXTI lines used for detecting button press events representing vehicle arrivals at traffic lights. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a194b027fff00c59287260857f63d1987" name="a194b027fff00c59287260857f63d1987"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a194b027fff00c59287260857f63d1987">&#9670;&#160;</a></span>GPIOCEN</h2>
 
@@ -155,6 +162,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initializes external interrupt inputs for vehicle detection buttons. </p>
+<p>This function configures GPIOC pins PC10–PC13 as input signals with internal pull-up resistors and maps them to EXTI lines 10–13. Falling edge triggers are enabled to detect button press events.</p>
+<p>The EXTI lines are unmasked and routed through the NVIC using the EXTI15_10 interrupt channel.</p>
+<dl class="section note"><dt>Note</dt><dd>Global interrupts are temporarily disabled during configuration to prevent spurious interrupt execution. </dd></dl>
 
 </div>
 </div>

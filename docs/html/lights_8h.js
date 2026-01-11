@@ -16,11 +16,12 @@ var lights_8h =
       [ "GREEN", "lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faa60bd322f93178d68184e30e162571ca", null ],
       [ "OFF", "lights_8h.html#aff4e660298d60b77a1fdac63d3747a5faac132f2982b98bcaa3445e535a03ff75", null ]
     ] ],
-    [ "amber", "lights_8h.html#a2e5f0fd7902b042c4745e8ea3c7ed6ef", null ],
-    [ "go", "lights_8h.html#a151f964262b924dad87a068143289ede", null ],
     [ "lights_init", "lights_8h.html#ad98336e38af281911c5f233341f1e6ed", null ],
+    [ "lights_set_green", "lights_8h.html#a8a28600fa4969492014ddaf9a2b5654e", null ],
     [ "lights_set_initial_state", "lights_8h.html#aa1657dd919dc16908ad84d19f6ff6091", null ],
+    [ "lights_set_red", "lights_8h.html#aea8d9b9046ca0ec832cecf6acbff746c", null ],
+    [ "lights_set_yellow", "lights_8h.html#ad7bf2648645474951c27717174ad25f9", null ],
+    [ "lights_update", "lights_8h.html#ab10d69640ef114ca3a8310fc08145674", null ],
     [ "map_lights", "lights_8h.html#a9a13fc389cd91f944d0143c640cbe00c", null ],
-    [ "stop", "lights_8h.html#a8cac25975608c9a6b36666c594d367a5", null ],
-    [ "Light", "lights_8h.html#a76404ace8e8a4fc2282150dd846b3123", null ]
+    [ "Light", "lights_8h.html#afa24aeee3ed12e1532bfcfc559a1bfd0", null ]
 ];

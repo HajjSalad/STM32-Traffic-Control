@@ -95,6 +95,9 @@ $(document).ready(function(){initNavTree('uart_8h.html',''); initResizable(); })
   <div class="headertitle"><div class="title">uart.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Public API for UART2 peripheral.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &quot;stm32f446xx.h&quot;</code><br />
 </div>
@@ -103,16 +106,21 @@ $(document).ready(function(){initNavTree('uart_8h.html',''); initResizable(); })
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a388edf12256bf73c3a8ee9734c3bd841" id="r_a388edf12256bf73c3a8ee9734c3bd841"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#a388edf12256bf73c3a8ee9734c3bd841">LOG</a>(fmt, ...)&#160;&#160;&#160;printf( fmt &quot;\n\r&quot;, ##__VA_ARGS__)</td></tr>
+<tr class="memdesc:a388edf12256bf73c3a8ee9734c3bd841"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format for printf.  <br /></td></tr>
 <tr class="separator:a388edf12256bf73c3a8ee9734c3bd841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a2dbf78bac0a26fd3cc86e0d5d509c546" id="r_a2dbf78bac0a26fd3cc86e0d5d509c546"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#a2dbf78bac0a26fd3cc86e0d5d509c546">uart2_init</a> (void)</td></tr>
+<tr class="memdesc:a2dbf78bac0a26fd3cc86e0d5d509c546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize UART2 peripheral.  <br /></td></tr>
 <tr class="separator:a2dbf78bac0a26fd3cc86e0d5d509c546"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9b28b865fd728e30020ea7cc7b5ce44" id="r_af9b28b865fd728e30020ea7cc7b5ce44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#af9b28b865fd728e30020ea7cc7b5ce44">uart2_write</a> (int ch)</td></tr>
+<tr class="memdesc:af9b28b865fd728e30020ea7cc7b5ce44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmit a single character over UART2.  <br /></td></tr>
 <tr class="separator:af9b28b865fd728e30020ea7cc7b5ce44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Public API for UART2 peripheral. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a388edf12256bf73c3a8ee9734c3bd841" name="a388edf12256bf73c3a8ee9734c3bd841"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a388edf12256bf73c3a8ee9734c3bd841">&#9670;&#160;</a></span>LOG</h2>
 
@@ -139,6 +147,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Format for printf. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
@@ -158,6 +168,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initialize UART2 peripheral. </p>
+<p>UART2 is configured for basic asynchronous communication and is used primarily for logging and debugging. </p>
+
 </div>
 </div>
 <a id="af9b28b865fd728e30020ea7cc7b5ce44" name="af9b28b865fd728e30020ea7cc7b5ce44"></a>
@@ -175,6 +188,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Transmit a single character over UART2. </p>
+<p>This function blocks until the transmit data register is empty, then writes the provided character to the UART data register.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ch</td><td>Character to transmit. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

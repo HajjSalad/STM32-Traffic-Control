@@ -97,23 +97,25 @@ $(document).ready(function(){initNavTree('queue_8h_source.html',''); initResizab
   <div class="headertitle"><div class="title">queue.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="queue_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef QUEUE_H_</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define QUEUE_H_</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;stm32f446xx.h&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keywordtype">bool</span> <a class="code hl_function" href="queue_8h.html#ab4283a2c1ddebf13ecd4e51e573fc41b">queue_is_empty</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keywordtype">bool</span> <a class="code hl_function" href="queue_8h.html#ad2640ab36fc082fdd9cb90559a1fc62f">queue_is_full</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keywordtype">void</span> <a class="code hl_function" href="queue_8h.html#af2840e02c312de3e1629a969752aef38">queue_enqueue</a>(uint32_t light_pair);</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>uint32_t <a class="code hl_function" href="queue_8h.html#a59d25b4a54570b5365e9c38a65d9cd35">queue_dequeue</a>(<span class="keywordtype">void</span>);</div>
+<a href="queue_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#ifndef QUEUE_H_</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#define QUEUE_H_</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;stm32f446xx.h&quot;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#endif </span><span class="comment">/* QUEUE_H_ */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="aqueue_8h_html_a59d25b4a54570b5365e9c38a65d9cd35"><div class="ttname"><a href="queue_8h.html#a59d25b4a54570b5365e9c38a65d9cd35">queue_dequeue</a></div><div class="ttdeci">uint32_t queue_dequeue(void)</div><div class="ttdef"><b>Definition</b> queue.c:30</div></div>
-<div class="ttc" id="aqueue_8h_html_ab4283a2c1ddebf13ecd4e51e573fc41b"><div class="ttname"><a href="queue_8h.html#ab4283a2c1ddebf13ecd4e51e573fc41b">queue_is_empty</a></div><div class="ttdeci">bool queue_is_empty(void)</div><div class="ttdef"><b>Definition</b> queue.c:14</div></div>
-<div class="ttc" id="aqueue_8h_html_ad2640ab36fc082fdd9cb90559a1fc62f"><div class="ttname"><a href="queue_8h.html#ad2640ab36fc082fdd9cb90559a1fc62f">queue_is_full</a></div><div class="ttdeci">bool queue_is_full(void)</div><div class="ttdef"><b>Definition</b> queue.c:18</div></div>
-<div class="ttc" id="aqueue_8h_html_af2840e02c312de3e1629a969752aef38"><div class="ttname"><a href="queue_8h.html#af2840e02c312de3e1629a969752aef38">queue_enqueue</a></div><div class="ttdeci">void queue_enqueue(uint32_t light_pair)</div><div class="ttdef"><b>Definition</b> queue.c:22</div></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// Function Prototypes</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keywordtype">bool</span> <a class="code hl_function" href="queue_8h.html#ab4283a2c1ddebf13ecd4e51e573fc41b">queue_is_empty</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keywordtype">bool</span> <a class="code hl_function" href="queue_8h.html#ad2640ab36fc082fdd9cb90559a1fc62f">queue_is_full</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keywordtype">void</span> <a class="code hl_function" href="queue_8h.html#af2840e02c312de3e1629a969752aef38">queue_enqueue</a>(uint32_t light_pair);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>int32_t <a class="code hl_function" href="queue_8h.html#a0928707bce5d7063ae099160c8fdfd2f">queue_dequeue</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#endif </span><span class="comment">/* QUEUE_H_ */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aqueue_8h_html_a0928707bce5d7063ae099160c8fdfd2f"><div class="ttname"><a href="queue_8h.html#a0928707bce5d7063ae099160c8fdfd2f">queue_dequeue</a></div><div class="ttdeci">int32_t queue_dequeue(void)</div><div class="ttdoc">Remove and return the next traffic light pair request.</div><div class="ttdef"><b>Definition</b> queue.c:59</div></div>
+<div class="ttc" id="aqueue_8h_html_ab4283a2c1ddebf13ecd4e51e573fc41b"><div class="ttname"><a href="queue_8h.html#ab4283a2c1ddebf13ecd4e51e573fc41b">queue_is_empty</a></div><div class="ttdeci">bool queue_is_empty(void)</div><div class="ttdoc">Check if the traffic light request queue is empty.</div><div class="ttdef"><b>Definition</b> queue.c:26</div></div>
+<div class="ttc" id="aqueue_8h_html_ad2640ab36fc082fdd9cb90559a1fc62f"><div class="ttname"><a href="queue_8h.html#ad2640ab36fc082fdd9cb90559a1fc62f">queue_is_full</a></div><div class="ttdeci">bool queue_is_full(void)</div><div class="ttdoc">Check if the traffic light request queue is full.</div><div class="ttdef"><b>Definition</b> queue.c:31</div></div>
+<div class="ttc" id="aqueue_8h_html_af2840e02c312de3e1629a969752aef38"><div class="ttname"><a href="queue_8h.html#af2840e02c312de3e1629a969752aef38">queue_enqueue</a></div><div class="ttdeci">void queue_enqueue(uint32_t light_pair)</div><div class="ttdoc">Add a traffic light pair request to the queue.</div><div class="ttdef"><b>Definition</b> queue.c:43</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

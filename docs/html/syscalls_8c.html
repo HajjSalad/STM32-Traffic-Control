@@ -110,6 +110,7 @@ $(document).ready(function(){initNavTree('syscalls_8c.html',''); initResizable()
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aa53ed4b191897a1bfc205aa1da005d24" id="r_aa53ed4b191897a1bfc205aa1da005d24"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscalls_8c.html#aa53ed4b191897a1bfc205aa1da005d24">__io_putchar</a> (int ch) <a class="el" href="syscalls_8c.html#af9aace1b44b73111e15aa39f06f43456">__attribute__</a>((weak))</td></tr>
+<tr class="memdesc:aa53ed4b191897a1bfc205aa1da005d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low-level character output function for printf redirection.  <br /></td></tr>
 <tr class="separator:aa53ed4b191897a1bfc205aa1da005d24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0122671640a3af49792ddaa59e8294e" id="r_ad0122671640a3af49792ddaa59e8294e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscalls_8c.html#ad0122671640a3af49792ddaa59e8294e">__io_getchar</a> (void)</td></tr>
 <tr class="separator:ad0122671640a3af49792ddaa59e8294e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -230,6 +231,16 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Low-level character output function for printf redirection. </p>
+<p>This function is called by the C standard library to output characters when using fucntions such as <code>printf()</code>. Characters are transmitted over UART2.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ch</td><td>Character to transmit </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The transmitted character </dd></dl>
 
 </div>
 </div>

@@ -88,7 +88,8 @@ Light 1-3: GREEN (east-west traffic allowed)
 🕹️ **Microcontroller Development**   
 - **VS Code** - Primary development environment for STM32 firmware, used for editing, building, and debugging.       
 - **OpenOCD** - Used for flashing firmware and debugging the STM32 over SWD.    
-- **Makefile** - Manages compilation, linking, and build automation for the project.  
+- **Makefile** - Manages compilation, linking, and build automation for the project.    
+
 ⚙️ **Hardware**    
 - STM32 MCU - Microcontroller responsible for controlling traffic light logic and timing.  
 - RGB LEDs - Used to simulate the traffic lights.  
@@ -100,7 +101,8 @@ Light 1-3: GREEN (east-west traffic allowed)
 Traffic Light LED Connections  
 - LEDs are configured in an active-low setup, with the common anode connected to ground.
 - Red and green channels driven by dedicated GPIO outputs.  
-- Yellow state achieved by simultaneously activating both red and green channels.        
+- Yellow state achieved by simultaneously activating both red and green channels.          
+
 Button Connections:  
 - Tactile push buttons are connected to GPIO input pins configured with internal pull-up resistors.  
 - Pressing a button pulls the input low, generating a GPIO external interrupt (EXTI) used to simulate vehicle detection.  
@@ -108,10 +110,10 @@ Button Connections:
 #### 📍 Pin Assignments
 |   LIGHT   |   RED     |   GREEN   |   BUTTON |
 |-----------|-----------|-----------|----------|
-|  `Light 1`  |   PB10    |    PB4    |   PC10   |
-|  `Light 2`  |   PB5     |    PB3    |   PC11   |
-|  `Light 3`  |   PB2     |    PB1    |   PC12   |
-|  `Light 4`  |   PB14    |    PB13   |   PC13   |
+|  `Light 1`  |   `PB10`    |    `PB4`    |   `PC10`   |
+|  `Light 2`  |   `PB5`    |    `PB3`    |   `PC11`   |
+|  `Light 3`  |   `PB2`     |    `PB1`    |   `PC12`   |
+|  `Light 4`  |   `PB14`   |    `PB13`   |   `PC13`   |
 
 ### Demo
 ![Demo 1](./demo.gif)

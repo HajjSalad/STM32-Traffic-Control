@@ -14,12 +14,13 @@ By leveraging external interrupts, queue-based scheduling, and SysTick timer, th
 2. **GPIO External Interrupts (EXTI)**  ·  `GPIO` · `Interrupts`  · `Vehicle Detection`
 - Each traffic lane has a button-simulated vehicle sensor connected to a GPIO pin.
 - External interrupts immediately detect vehicle presence, triggering the control logic efficiently.
-3. **Efficient queue system**  ·  `Circular Queue` · `Scheduling`
+3. **Efficient Queue System**  ·  `Circular Queue` · `Scheduling`
 - Uses a circular queue to manage requests for green signals from different lanes.
 - Guarantees first-come, first-served priority while preventing lost requests.
 - Optimized for multiple simultaneous requests.
 4. **Dynamic Signal Timing**  ·  `Adaptive Control` · `Timing`
-- Adjust green signal duration based on the number of vehicles detected. Example: 1 car -> 2 seconds, 2 cars -> 3 seconds, >3 cars -> 6 seconds.
+- Adjust green signal duration based on the number of vehicles detected.    
+    Example: 1 car -> 2 seconds, 2 cars -> 3 seconds, >3 cars -> 5 seconds.
 - Ensures shorter waits for low-traffic lanes and longer green phases for high-traffic lanes.
 5. **SysTick Timer**  ·  `Timers` · `Scheduling` · `Precision`
 - Implements a millisecond-precision timer for scheduling light transitions and timeouts.
@@ -85,9 +86,9 @@ Light 1-3: GREEN (east-west traffic allowed)
 
 ### 🛠️ Tools & Software
 🕹️ **Microcontroller Development**   
-- VS Code - Primary development environment for STM32 firmware, used for editing, building, and debugging.       
-- OpenOCD - Used for flashing firmware and debugging the STM32 over SWD.    
-- Makefile - Manages compilation, linking, and build automation for the project.
+- **VS Code** - Primary development environment for STM32 firmware, used for editing, building, and debugging.       
+- **OpenOCD** - Used for flashing firmware and debugging the STM32 over SWD.    
+- **Makefile** - Manages compilation, linking, and build automation for the project.  
 ⚙️ **Hardware**    
 - STM32 MCU - Microcontroller responsible for controlling traffic light logic and timing.  
 - RGB LEDs - Used to simulate the traffic lights.  
@@ -96,15 +97,15 @@ Light 1-3: GREEN (east-west traffic allowed)
 - Breadboards - Enables rapid prototyping and testing of the traffic light system.  
 
 ### ⛓️ Hardware Connection  
-RGB LED Connections:   
-- Common anode pins connected to ground (active-low configuration)   
-- Red and green channels driven by dedicated GPIO outputs  
-- Yellow state achieved by simultaneously activating both red and green channels  
+Traffic Light LED Connections  
+- LEDs are configured in an active-low setup, with the common anode connected to ground.
+- Red and green channels driven by dedicated GPIO outputs.  
+- Yellow state achieved by simultaneously activating both red and green channels.        
 Button Connections:  
-- Tactile switches connected to GPIO input pins with internal pull-up resistors  
-- Pressing a button pulls the input low, triggering a vehicle detection interrupt  
+- Tactile push buttons are connected to GPIO input pins configured with internal pull-up resistors.  
+- Pressing a button pulls the input low, generating a GPIO external interrupt (EXTI) used to simulate vehicle detection.  
 
-### 📍 Pin Assignments
+#### 📍 Pin Assignments
 |   LIGHT   |   RED     |   GREEN   |   BUTTON |
 |-----------|-----------|-----------|----------|
 |  `Light 1`  |   PB10    |    PB4    |   PC10   |
